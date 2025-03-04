@@ -1,0 +1,10 @@
+title: $:/linkedhealth/research_view_test
+
+
+<style> .wideEdit { width:100%; } </style>
+
+
+!! Descripción de la investigación
+
+<$edit-text tiddler=<<currentTiddler>> field="descripcion" tag="textarea" class="wideEdit" />
+

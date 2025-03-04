@@ -1,0 +1,13 @@
+{
+  "title": "$:/plugins/alvsan1/TiddleyWikiResearch",
+  "description": "Add research semantic interoperabily concept's base on OBI in your wiki",
+  "author": "Alvaro Sanchez",
+  "version": "0.0.1",
+  "released": "Tue, 5 Mar 2025 15:05:08 GMT",
+  "core-version": ">=5.0.0",
+  "source": "https://github.com/alvsan1/TW5-TM-SemanticWeb",
+  "type": "application/json",
+  "plugin-type": "plugin",
+  "dependents": "$:/plugins/felixhayashi/tiddlymap",
+  "depends": "$:/plugins/felixhayashi/tiddlymap"
+}

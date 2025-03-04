@@ -1,0 +1,47 @@
+title: $:/linkedhealth/research_view
+
+\define my-actions()
+       <$macrocall $name="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
+\end
+
+<style> .wideEdit { width:100%; } </style>
+
+
+!! Descripción de la investigación
+
+<$edit-text tiddler="$:/state/descripcionTemp" field="descripcion" tag="textarea" class="wideEdit" default={{!!descripcion}}/>
+
+<$button>
+  <$action-setfield $tiddler=<<currentTiddler>> $field="descripcion" $value={{$:/state/descripcionTemp!!descripcion}} />
+  <$action-deletetiddler $tiddler="$:/state/descripcionTemp" />
+  Guardar Descripción
+</$button>
+
+
+
+!! Agregar autor
+
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="autor" placeholder="Escribe un nombre..." style="width:80%;" />
+
+<$button>
+  <$wikify name="autoresActualizados" text="""{{!!autores}}|{{$:/state/nuevoAutorTemp!!autor}}""">
+    <$action-setfield $tiddler=<<currentTiddler>> $field="autores" $value=<<autoresActualizados>> />
+  </$wikify>
+  <$action-deletetiddler $tiddler="$:/state/nuevoAutorTemp" />
+  ➕ Agregar Autor
+</$button>
+
+
+!! Lista de autores:
+<$list filter="[all[current]get[autores]split[|]]">
+- {{!!title}} 
+  <$button set="!!autores" setTo="""<currentTiddler>get[autores]search-replace[<currentTiddler>get[title]|]""" class="tc-btn-invisible">❌</$button>
+</$list>
+
+<$tiddlymap view=<<view-name>> editor="advanced" height="450px"></$tiddlymap>
+
+<$button actions=<<my-actions>> >
+
+Research!
+
+</$button>
