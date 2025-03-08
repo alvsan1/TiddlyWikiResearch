@@ -1,41 +1,47 @@
-title: $:/linkedhealth/research_view
-
 \define my-actions()
        <$macrocall $name="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
 \end
 
 <style> .wideEdit { width:100%; } </style>
 
-
 !! Descripción de la investigación
-
-<$edit-text tiddler="$:/state/descripcionTemp" field="descripcion" tag="textarea" class="wideEdit" default={{!!descripcion}}/>
+<$edit-text 
+  tiddler="$:/state/descripcionTemp" 
+  field="descripcion" 
+  class="wideEdit" 
+  placeholder="Escriba aquí la descripción de su investigación..." 
+  default={{!!descripcion}}
+  focus="true"
+  tag="textarea"
+  rows="6"
+/>
 
 <$button>
-  <$action-setfield $tiddler=<<currentTiddler>> $field="descripcion" $value={{$:/state/descripcionTemp!!descripcion}} />
-  <$action-deletetiddler $tiddler="$:/state/descripcionTemp" />
-  Guardar Descripción
-</$button>
+    <$action-setfield $tiddler=<<currentTiddler>> $field="descripcion" $value={{$:/state/descripcionTemp!!descripcion}} />
+    <$action-deletetiddler $tiddler="$:/state/descripcionTemp" />
+    Guardar Descripción
+</$button>  
 
-
-
-!! Agregar autor
+!! Gestión de Autores
 
 <$edit-text tiddler="$:/state/nuevoAutorTemp" field="autor" placeholder="Escribe un nombre..." style="width:80%;" />
-
 <$button>
-  <$wikify name="autoresActualizados" text="""{{!!autores}}|{{$:/state/nuevoAutorTemp!!autor}}""">
+  <$wikify name="autoresActualizados" text={{{ [{!!autores}addsuffix[|]addsuffix{$:/state/nuevoAutorTemp!!autor}] }}}>
     <$action-setfield $tiddler=<<currentTiddler>> $field="autores" $value=<<autoresActualizados>> />
   </$wikify>
   <$action-deletetiddler $tiddler="$:/state/nuevoAutorTemp" />
   ➕ Agregar Autor
 </$button>
 
-
-!! Lista de autores:
-<$list filter="[all[current]get[autores]split[|]]">
-- {{!!title}} 
-  <$button set="!!autores" setTo="""<currentTiddler>get[autores]search-replace[<currentTiddler>get[title]|]""" class="tc-btn-invisible">❌</$button>
+!! Autores Actuales:
+<$list filter="[{!!autores}split[|]!is[blank]]" variable="autor">
+  <div>
+    <span><<autor>></span>
+    <$button class="tc-btn-invisible">
+      <$action-setfield $tiddler=<<currentTiddler>> $field="autores" $value={{{ [{!!autores}split[|]remove<autor>join[|]] }}}/>
+      🗑️
+    </$button>
+  </div>
 </$list>
 
 <$tiddlymap view=<<view-name>> editor="advanced" height="450px"></$tiddlymap>
