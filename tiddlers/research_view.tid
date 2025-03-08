@@ -1,5 +1,12 @@
+title: $:/linkedhealth/research_view
+
 \define my-actions()
-       <$macrocall $name="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
+  <$transclude $variable="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
+\end
+
+
+\define add-node-to-view-main()
+   <$transclude $variable="addNodeToView" nodeName={{$:/state/newNodeTemp!!node}} main=true nodeGraph={{$:/state/newNodeTemp!!nodegraph}} view={{!!titleResearch}}/>
 \end
 
 <style> .wideEdit { width:100%; } </style>
@@ -44,7 +51,24 @@
   </div>
 </$list>
 
-<$tiddlymap view=<<view-name>> editor="advanced" height="450px"></$tiddlymap>
+
+!! Nodo principal :
+
+<$select tiddler="$:/state/newNodeTemp" field="nodegraph" default="default">
+  <option value="snomedct">SnomedCt</option>
+  <option value="fhir">FHIR</option>
+</$select>
+
+<$edit-text 
+  tiddler="$:/state/newNodeTemp" 
+  field="node" 
+  placeholder="Nombre del nuevo nodo..." 
+/>
+<$button actions=<<add-node-to-view-main>> >
+  ➕ Añadir Nodo
+</$button>
+
+<$tiddlymap view={{!!titleresearch}} editor="advanced" height="450px" />
 
 <$button actions=<<my-actions>> >
 
