@@ -1,0 +1,7 @@
+created: 20250309110511739
+modified: 20250309110511739
+title: Initial Config
+initial: false
+tmap.id: 0d030722-9064-4f15-850d-446765931202
+type: text/vnd.tiddlywiki
+fhir_endpoint: http://192.168.1.134:3030/fhir/

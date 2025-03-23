@@ -1,0 +1,107 @@
+title: $:/linkedhealth/concept_view/fhir
+
+\define levelFilter() [tag[$(tiddly-source)$]]
+
+\define referenceFilter() [tag[$(references-source)$]]
+
+\define levelFilterGroup() [tag[$(tiddly-source)$]has[oproperty]has[group]each[description]sort[description]]
+
+\define descriptionFilter() [tag[$(tiddly-source)$]has[group]description[$(description-source)$]each[oproperty]sort[oproperty ovalor]]
+
+\define ovalorFilter() $(ovalor-list)$ +[tag[$(oproperty-item)$]tag[$(node-list)$]]
+
+\define viewrelations()
+
+
+<table class="fhir-parameters">
+<tr>
+  <th>Parámetro</th>
+  <th>Descripción</th>
+  <th>Tipo</th>
+</tr>
+<$list filter=<<levelFilter>> >
+<tr>
+  <td><$link><$view field="caption"/></$link></td>
+  <td><$transclude field="description"/></td>
+  <td>
+    <$set name="references-source" value=<<currentTiddler>> >
+    <$list filter=<<referenceFilter>> separator=", ">
+      <$link><$view field="caption"/></$link>
+    </$list>
+    </$set>
+  </td>
+</tr>
+</$list>
+</table>
+
+
+<$list filter=<<levelFilterGroup>> >
+<div class="tw-menu-list-subitem">
+
+!<$view field="description" />
+</div>
+
+<$set name="description-source" value={{!!description}}>
+<$list filter=<<descriptionFilter>> >
+
+
+
+
+
+<div class="tw-menu-list-subitem">
+
+<$set name="ovalor-list" value={{!!ovalor}}>
+<$set name="node-list" value={{!!title}}>
+<$list filter=[list[!!oproperty]] >
+<div class="tw-menu-list-subitem">
+
+*<$link to={{!!title}}>
+<$view field="label" />
+</$link>
+</div>
+
+<$set name="oproperty-item" value={{!!title}}>
+<$list filter=<<ovalorFilter>> >
+<div class="tw-menu-list-subitem">
+
+**<$link to={{!!title}}>
+<$view field="label" />
+</$link>
+</div>
+</$list>
+</$set>
+
+
+</$list>
+</$set>
+</$set>
+
+</div>
+</$list>
+</$set>
+
+\end
+
+<table>
+<$list filter="[title<currentTiddler>has[label]]" variable="ignore">
+<tr><td>Label</td><td><$view field="label" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[description]]" variable="ignore">
+<tr><td>Description</td><td><$view field="description" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[comments]]" variable="ignore">
+<tr><td>Comments</td><td><$view field="comments" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[term]]" variable="ignore">
+<tr><td>Terms</td><td><$view field="term" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[synonym]]" variable="ignore">
+<tr><td>Synonym</td><td><$view field="synonym" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+</table>
+
+<$set name="tiddly-source" value={{!!title}}>
+<<viewrelations>>
+</$set>
+
+<$tiddlymap editor="vis" view={{!!label}} height="450px"></$tiddlymap>

@@ -1,0 +1,33 @@
+created: 20250323164958716
+modified: 20250323165035093
+tags: $:/tags/Stylesheet
+title: $:/tags/Stylesheet/FHIR
+type: text/vnd.tiddlywiki
+
+.fhir-parameters {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.fhir-parameters th {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.fhir-parameters td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.fhir-parameters tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.fhir-parameters tr:hover {
+  background-color: #f1f7ff;
+}

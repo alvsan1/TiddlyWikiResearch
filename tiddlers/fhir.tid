@@ -1,0 +1,72 @@
+title: $:/linkedhealth/fhir
+tags: $:/tags/sparql
+
+PREFIX fhir: <http://hl7.org/fhir/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+
+construct { ##ConceptTW## rdfs:domain ?parameter  ;
+		dc:title ?conceptTitle;
+		rdfs:comment ?concpetComment;
+		rdfs:label ?conceptLabel.
+	?parameter owl:someValuesFrom  ?reference ;
+      owl:allValuesFrom ?value  ;
+      rdfs:range ?type;
+      dc:title ?title;
+      rdfs:comment ?comment;
+      rdfs:label ?label .
+	?value dc:title ?valueTitle;
+		rdfs:comment ?valueComment;
+		rdfs:label ?valueLabel .
+	?reference dc:title ?referenceTitle ;
+    		rdfs:comment ?referenceComment ;
+    	    rdfs:label ?referenceLabel.
+   	?type dc:title ?typeTitle;
+    	rdfs:comment ?typeComment;
+    	rdfs:label ?typeLabel .}
+where { 
+	GRAPH <http://hl7.org/fhir/> {		
+		?parameter rdfs:domain ##ConceptTW##.
+		Optional { ##ConceptTW## dc:title ?rawConceptTitle .
+		BIND(STR(?rawConceptTitle) AS ?conceptTitle) }
+    	Optional { ##ConceptTW## rdfs:comment ?rawConcpetComment .
+    	BIND(STR(?rawConcpetComment) AS ?concpetComment) }
+    	Optional { ##ConceptTW## rdfs:label ?rawConceptLabel .
+    	BIND(STR(?rawConceptLabel) AS ?conceptLabel) }
+		Optional {?parameter dc:title ?rawTitle .
+		BIND(STR(?rawTitle) AS ?title) }
+	 	Optional {?parameter rdfs:comment ?rawComment .
+	 	BIND(STR(?rawComment) AS ?comment) }
+		Optional {?parameter rdfs:label ?rawLabel .
+		BIND(STR(?rawLabel) AS ?label) }
+		Optional { ?parameter  rdfs:subClassOf ?blank. 
+	          ?blank owl:someValuesFrom ?reference .
+	  		  Optional {?reference dc:title ?rawReferenceTitle .
+	  		  BIND(STR(?rawReferenceTitle) AS ?referenceTitle) }
+	 		  Optional {?reference rdfs:comment ?rawReferenceComment .
+	 		  BIND(STR(?rawReferenceComment) AS ?referenceComment) }
+			  Optional {?reference rdfs:label ?rawReferenceLabel .
+			  BIND(STR(?rawReferenceLabel) AS ?referenceLabel) }
+	  	}
+	  	Optional { ?parameter rdfs:range ?type  .
+	  	Optional {?type dc:title ?rawTypeTitle .
+	  	BIND(STR(?rawTypeTitle) AS ?typeTitle) }
+	 	Optional {?type rdfs:comment ?rawTypeComment .
+	 	BIND(STR(?rawTypeComment) AS ?typeComment) }
+	    Optional {?type rdfs:label ?rawTypeLabel .
+	    BIND(STR(?rawTypeLabel) AS ?typeLabel) }
+	  	}
+	 	Optional { ##ConceptTW## rdfs:subClassOf ?blank2.
+	  		  ?blank owl:allValuesFrom ?value ;
+	      			owl:onProperty ?parameter .
+	                Optional {?value dc:title ?rawValueTitle .
+	                BIND(STR(?rawValueTitle) AS ?valueTitle) }
+	 				Optional {?value rdfs:comment ?rawValueComment .
+	 				BIND(STR(?rawValueComment) AS ?valueComment) }
+					Optional {?value rdfs:label ?rawValueLabel .
+					BIND(STR(?rawValueLabel) AS ?valueLabel) }
+		} 
+	}
+}

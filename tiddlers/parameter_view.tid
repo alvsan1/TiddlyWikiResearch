@@ -1,0 +1,20 @@
+title: $:/linekedhealth/parameter_view
+
+
+<table>
+<$list filter="[title<currentTiddler>has[label]]" variable="ignore">
+<tr><td>Label</td><td><$view field="label" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[description]]" variable="ignore">
+<tr><td>Description</td><td><$view field="description" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[comments]]" variable="ignore">
+<tr><td>Comments</td><td><$view field="comments" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[term]]" variable="ignore">
+<tr><td>Terms</td><td><$view field="term" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+<$list filter="[title<currentTiddler>has[synonym]]" variable="ignore">
+<tr><td>Synonym</td><td><$view field="synonym" format="htmlencodedplainwikified"></$view></td></tr>
+</$list>
+</table>

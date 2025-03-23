@@ -68,7 +68,7 @@ title: $:/linkedhealth/research_view
   ➕ Añadir Nodo
 </$button>
 
-<$tiddlymap view={{!!titleresearch}} editor="advanced" height="450px" />
+<$tiddlymap view={{!!titleResearch}} editor="advanced" height="450px" />
 
 <$button actions=<<my-actions>> >
 

@@ -39,8 +39,9 @@ exports.run = function(nodeName, main, nodeGraph, view) {
             title: nodeName, 
             know: true,
             node: true,
-            main : main;
+            main : main,
             nodeGraph : nodeGraph,
+            text: $tw.wiki.getTiddler("$:/linkedhealth/concept_view/" + nodeGraph).fields.text
         }));
         
         // Forzar asignación de ID
@@ -65,12 +66,7 @@ exports.run = function(nodeName, main, nodeGraph, view) {
 
 	/*
 	viewSubject.addPlaceholder( nodeObject );
-	viewSubject.saveNodePosition( nodeObject );
-
-	
-	var nodosvista = viewSubject.getNodeData();	    
-	nodosvista[nodeObjectId]['open-view'] = object;
-	viewSubject.saveNodeData(nodosvista);*/
+	viewSubject.saveNodePosition( nodeObject );*/
 
 
 	$tw.wiki.deleteTiddler("$:/state/newNodeTemp");
