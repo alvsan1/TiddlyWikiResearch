@@ -1,0 +1,24 @@
+title: obi-class-selector-view
+type: text/vnd.tiddlywiki
+tags: $:/tags/ViewTemplate
+
+! 📚 Clasificación semántica OBI
+
+<$list filter="[tag[concept-pending-class]]">
+<div class="tc-tiddler-preview tc-subtitle">
+  <strong>🔹 Concepto:</strong> <$link to=<<currentTiddler>>><<currentTiddler>></$link><br/>
+
+  <strong>🔎 Clase OBI:</strong>
+  <select tiddler=<<currentTiddler>> field="obi_class">
+    <option value="">(Seleccionar clase)</option>
+    <option value="obi:measurement_datum">obi:measurement_datum</option>
+    <option value="obi:diagnosis">obi:diagnosis</option>
+    <option value="obi:planned_process">obi:planned_process</option>
+    <option value="obi:objective_specification">obi:objective_specification</option>
+    <!-- Agregar más según necesidad -->
+  </select><br/>
+
+  <strong>👁 Visualizar:</strong>
+  <$button set="$:/state/viewNode" setTo=<<currentTiddler>> >🧠 Ver en vista</$button><br/><br/>
+</div>
+</$list>

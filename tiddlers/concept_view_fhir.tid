@@ -12,7 +12,6 @@ title: $:/linkedhealth/concept_view/fhir
 
 \define viewrelations()
 
-
 <table class="fhir-parameters">
 <tr>
   <th>Parámetro</th>

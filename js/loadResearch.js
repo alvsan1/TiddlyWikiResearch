@@ -22,6 +22,36 @@ exports.synchronous = true;
 
 exports.startup = function(callback) {
 	
+
+  if (window.addEventListener) {
+    window.addEventListener("message", function(event) {
+		  if (event.data && event.data.type === "formDataChanged") {
+		    console.log(event);
+
+		    const schema = event.data.schema;
+		    const contextTiddler = event.data.context || "default";
+		    const timestamp = new Date().toISOString();
+
+		    const tiddlerTitle = `$:/data/${schema}/${contextTiddler}`;
+
+		    const newText = JSON.stringify(event.data.data, null, 2);
+
+		    $tw.wiki.addTiddler(new $tw.Tiddler({
+		      title: tiddlerTitle,
+		      type: "application/json",
+		      text: newText,
+		      schema,
+		      "form-origin": contextTiddler,
+		      created: timestamp
+		    }));
+
+		    console.log("📦 Formulario persistido:", tiddlerTitle);
+		  }
+		});
+  }
+
+
+
 	// create a new listener
 	$tw.wiki.addEventListener("change",function(changes) {
 		var nodeResearch = $tw.wiki.filterTiddlers("[research[true]]");

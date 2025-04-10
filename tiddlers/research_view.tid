@@ -9,7 +9,9 @@ title: $:/linkedhealth/research_view
    <$transclude $variable="addNodeToView" nodeName={{$:/state/newNodeTemp!!node}} main=true nodeGraph={{$:/state/newNodeTemp!!nodegraph}} view={{!!titleResearch}}/>
 \end
 
+
 <style> .wideEdit { width:100%; } </style>
+
 
 !! Descripción de la investigación
 <$edit-text 

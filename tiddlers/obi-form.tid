@@ -1,0 +1,23 @@
+\define formulario-obi(schema, context, height:"600px")
+
+<$set name="tiddlerPath" value="$:/data/$schema$/$context$">
+<$set name="textoPlano" value={{{ [<tiddlerPath>get[text]join[]] }}}>
+<$set name="textoCodificado" value={{{ [<textoPlano>]+[encodeuricomponent[]] }}}>
+<$set name="baseURL" value={{{ "http://192.168.1.134:3010/?schema=$schema$&context=$context$&prefill=" [<textoCodificado>] +[join[]] }}}>
+
+<div class="tc-panel-body">
+  <iframe
+    src=<<baseURL>>
+    width="100%"
+    height=<<__height__>>
+    frameborder="0"
+    style="border: 1px solid #ccc; border-radius: 8px;">
+  </iframe>
+</div>
+</$set>
+</$set>
+</$set>
+\end
+
+
+<$macrocall $name="formulario-obi" schema="IMC" context=<<currentTiddler>> />
