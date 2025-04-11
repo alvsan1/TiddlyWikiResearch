@@ -70,6 +70,10 @@ title: $:/linkedhealth/research_view
   ➕ Añadir Nodo
 </$button>
 
+! Clasificación semántica
+<<obi-class-selector-view>>
+
+
 <$tiddlymap view={{!!titleResearch}} editor="advanced" height="450px" />
 
 <$button actions=<<my-actions>> >

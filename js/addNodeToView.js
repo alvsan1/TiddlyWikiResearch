@@ -22,14 +22,15 @@ exports.params = [
 	{name: "nodeName"},
 	{name:"main"},
 	{name: "nodeGraph"},
-	{name: "view"}
+	{name: "view"},
+    {tags: "tags"}
 ];
 
 /*
 Run the macro
 */
 exports.run = function(nodeName, main, nodeGraph, view) {
-	console.log("nodeName: " + nodeName + ", main: " + main + ", nodeGraph: " + nodeGraph + ", view: " + view);
+	console.log("nodeName: " + nodeName + ", main: " + main + ", nodeGraph: " + nodeGraph + ", view: " + view );
 	// Paso 1: Asegurarse de que el nodo existe
     var nodeId = $tm.adapter.getId(nodeName);
     
@@ -39,6 +40,7 @@ exports.run = function(nodeName, main, nodeGraph, view) {
             title: nodeName, 
             know: true,
             node: true,
+            tags: ["concept-pending-class"],
             main : main,
             nodeGraph : nodeGraph,
             text: $tw.wiki.getTiddler("$:/linkedhealth/concept_view/" + nodeGraph).fields.text

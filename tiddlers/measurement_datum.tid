@@ -1,0 +1,28 @@
+title: obi-class:measurement_datum
+tags: obi-class
+type: text/vnd.tiddlywiki
+
+! 🧪 Clase OBI: obi:measurement_datum
+
+`measurement_datum` representa una medición observacional de un atributo cuantificable, como presión arterial, temperatura corporal, IMC, etc.
+
+## 🧬 Uso esperado
+
+Se espera que un concepto etiquetado con esta clase represente una instancia de `obi:measurement_datum` en el RDF generado, con las siguientes propiedades sugeridas:
+
+- `rdf:type`: obi:measurement_datum
+- `obi:has_specified_input`: Código de lo que se mide (ej. SNOMED CT)
+- `obi:has_specified_output`: Valor y unidad
+- `obi:has_measurement_target`: Sujeto medido (ej. paciente)
+- `obi:measurement_time`: Timestamp de la medición
+- `prov:wasDerivedFrom`: ID del recurso original (ej. recurso FHIR)
+
+## 🧰 Plantilla TTL esperada
+
+```turtle
+:measurement_001 a obi:measurement_datum ;
+    obi:has_specified_input snomed:123456 ;
+    obi:has_specified_output "140 mmHg" ;
+    obi:has_measurement_target :patient_001 ;
+    obi:measurement_time "2024-10-02T12:34:00Z"^^xsd:dateTime ;
+    prov:wasDerivedFrom fhir:observation-9876 .

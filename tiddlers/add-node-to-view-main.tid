@@ -1,0 +1,11 @@
+title: add-node-to-view-main
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define add-node-to-view-main()
+<$transclude $variable="addNodeToView" 
+  nodeName={{$:/state/newNodeTemp!!node}} 
+  main=true 
+  nodeGraph={{$:/state/newNodeTemp!!nodegraph}} 
+  view={{!!titleResearch}}/>
+\end
