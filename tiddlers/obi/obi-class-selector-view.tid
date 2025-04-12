@@ -1,0 +1,31 @@
+title: obi-class-selector-view
+type: text/vnd.tiddlywiki
+
+! 🧠 Selección de clase OBI para conceptos clínicos
+
+
+<$list filter="[tag[concept-pending-class]]">
+<div class="tc-tiddler-preview tc-subtitle">
+  <strong>Concepto:</strong> <$link to=<<currentTiddler>>><<currentTiddler>></$link><br/>
+<$select tiddler="$:/temp/obi/selection/<<conceptName>>" field="obi_class_selection">
+    <option value="">(Seleccionar clase)</option>
+    <option value="obi:measurement_datum">measurement_datum</option>
+    <option value="obi:diagnosis">diagnosis</option>
+    <option value="obi:planned_process">planned_process</option>
+  </$select><br/><br/>
+
+  <$set name="selectedObiClass" value={{$:/temp/obi/selection/<<conceptName>>!!obi_class_selection}}>
+    <$button>
+      <$macrocall 
+        $name="create-obi-instance"
+        concept=<<conceptName>>
+        class=<<selectedObiClass>>
+        investigation={{!!title}}
+      />
+      ✅ Aceptar selección
+    </$button>
+  </$set>
+
+ </div>
+</$list>
+ 

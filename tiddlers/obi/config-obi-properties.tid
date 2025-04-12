@@ -1,0 +1,16 @@
+title: $:/config/obi/class-properties
+type: application/json
+
+{
+  "obi:measurement_datum": [
+    "obi:has_specified_input",
+    "obi:has_specified_output",
+    "obi:has_measurement_target",
+    "obi:measurement_time"
+  ],
+  "obi:diagnosis": [
+    "obi:has_participant",
+    "obi:has_output",
+    "obi:has_temporal_part"
+  ]
+}
