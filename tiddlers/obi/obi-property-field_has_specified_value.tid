@@ -1,0 +1,20 @@
+title: obi-property-field_has_specified_value
+type: text/vnd.tiddlywiki
+
+<span style="color:#C1440E;">🧠</span> <strong>Parametro - Valor especifico</strong><br/>
+
+<!-- Paso 1: Seleccionar parámetro -->
+<$set name="aboutConcept" value=<<about>>>
+<$select tiddler=<<instance>> field="obi:has_specified_value">
+  <option value="">(Seleccionar parámetro)</option>
+  <$list filter="[tag<aboutConcept>]">
+    <option value=<<currentTiddler>>><<currentTiddler>></option>
+  </$list>
+</$select><br/>
+
+<!-- Paso 2: Ingresar el valor numérico -->
+<$set name="selectedParam" value={{!!obi:has_specified_value}}>
+  <p><em>Valor para <strong><<selectedParam>></strong>:</em></p>
+  <$edit-text tiddler=<<instance>> field="obi:has_specified_value_value" placeholder="Ej: 130" />
+</$set>
+</$set>

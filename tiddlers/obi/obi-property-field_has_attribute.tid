@@ -1,0 +1,22 @@
+title: obi-property-field_has_attribute
+type: text/vnd.tiddlywiki
+
+<span style="color:#C1440E;">🧠</span> <strong>Atributo medido</strong><br/>
+
+<!-- Selector de parámetro (como tiddler codificado) -->
+<$set name="conceptTag" value={{!!about}}>
+  <$list filter="[tag<conceptTag>]">
+    <label>
+      <input type="radio" name="atributo" value=<<currentTiddler>> 
+        checked={{!!obi:has_attribute}} tiddler=<<currentTiddler>> />
+      <<currentTiddler>>
+    </label><br/>
+  </$list>
+</$set>
+
+<!-- Campos para system y code -->
+<label>System:</label>
+<$edit-text tiddler=<<currentTiddler>> field="obi:attribute_system" placeholder="Ej: http://snomed.info/sct" /><br/>
+
+<label>Code:</label>
+<$edit-text tiddler=<<currentTiddler>> field="obi:attribute_code" placeholder="Ej: 123456" /><br/>

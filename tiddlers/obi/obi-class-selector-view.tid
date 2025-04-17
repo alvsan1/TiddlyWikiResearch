@@ -18,9 +18,9 @@ type: text/vnd.tiddlywiki
     <$button>
       <$macrocall 
         $name="create-obi-instance"
-        concept=<<conceptName>>
+        concept={{!!title}}
         class=<<selectedObiClass>>
-        investigation={{!!title}}
+        investigation=<<conceptName>>
       />
       ✅ Aceptar selección
     </$button>

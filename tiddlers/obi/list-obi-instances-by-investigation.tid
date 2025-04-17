@@ -1,0 +1,24 @@
+title: list-obi-instances-by-investigation
+type: text/vnd.tiddlywiki
+
+\define myFilter() [tag[obi-instance]obi_part_of[$(conceptNameValue)$]]
+
+! Instancias OBI de esta investigación
+
+<<conceptName>>
+<$vars conceptNameValue=<<conceptName>>>
+<$list filter=<<myFilter>>>
+<div class="tc-tiddler-preview tc-subtitle">
+  <strong>Instancia:</strong> <$link to=<<currentTiddler>>><<currentTiddler>></$link><br/>
+  <em>Clase:</em> {{!!obi_class}}<br/><br/>
+
+  <<obi-property-render>>
+
+  <$button>
+    <$action-deletetiddler $tiddler=<<currentTiddler>> />
+    🗑 Eliminar
+  </$button>
+
+  <hr/>
+</div>
+</$list>

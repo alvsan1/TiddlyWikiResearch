@@ -1,0 +1,22 @@
+title: macro-obi-property-field-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define obi-property-field-render(property, about, instance)
+<$reveal type="match" text="obi:has_specified_value" default=<<__property__>>>
+     {{obi-property-field_has_specified_value}}
+</$reveal>
+<$reveal type="match" text="obi:has_attribute" default=<<__property__>>>
+  {{obi-property-field_has_attribute}}
+</$reveal>
+<$reveal type="nomatch" text="obi:has_specified_value" default=<<__property__>>>
+<$reveal type="nomatch" text="obi:has_attribute" default=<<__property__>>>
+  <!-- Campo genérico para cualquier propiedad no mapeada -->
+  NO MATCH
+<strong><<__property__>>:</strong>
+  <$edit-text tiddler=<<currentTiddler>> field=<<__property__>> placeholder="Valor..." /><br/>
+</$reveal>
+</$reveal>
+\end
+
+

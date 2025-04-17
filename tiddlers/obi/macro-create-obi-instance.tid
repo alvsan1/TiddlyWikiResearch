@@ -3,16 +3,14 @@ type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
 \define create-obi-instance(concept, class, investigation)
-<$set name="instanceId" value="obi-instance-<<now 'YYYYMMDD-HHmmssSSS'>>">
   <$action-createtiddler
-    $basetitle=<<instanceId>>
+    $basetitle="obi-instance"
     text=""
     tags="obi-instance"
     obi_class=<<__class__>>
     about=<<__concept__>>
     rdf:type=<<__class__>>
-    obi:part_of=<<__investigation__>>
+    obi_part_of=<<__investigation__>>
   />
   <$action-deletetiddler $tiddler="$:/temp/obi/class/selected" />
-</$set>
 \end

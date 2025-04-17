@@ -73,6 +73,8 @@ title: $:/linkedhealth/research_view
 ! Clasificación semántica
 <$set name="conceptName" value=<<currentTiddler>> >
 {{obi-class-selector-view}}
+
+{{list-obi-instances-by-investigation}}
 </$set>
 
 <$tiddlymap view={{!!titleResearch}} editor="advanced" height="450px" />
