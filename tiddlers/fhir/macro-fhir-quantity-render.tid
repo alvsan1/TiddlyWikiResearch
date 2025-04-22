@@ -1,0 +1,11 @@
+title: macro-fhir-quantity-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-quantity(param instance)
+<p><strong><<param>> (Quantity):</strong></p>
+<p>Valor numérico:</p>
+<$edit-text tiddler=<<instance>> field="<<param>>_value" type="number" />
+<p>Unidad:</p>
+<$edit-text tiddler=<<instance>> field="<<param>>_unit" placeholder="mmHg, kg, etc." />
+\end

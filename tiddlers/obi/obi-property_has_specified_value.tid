@@ -1,0 +1,26 @@
+title: obi-property_has_specified_value
+type: text/vnd.tiddlywiki
+
+<span style="color:#C1440E;">🧠</span> <strong>Parameter class </strong><br/>
+
+<!-- Paso 1: Seleccionar parámetro -->
+<$set name="aboutConcept" value=<<class>>>
+<$select tiddler=<<instance>> field="obi:has_specified_value">
+  <option value="">(Seleccionar parámetro)</option>
+  <$list filter="[tag<aboutConcept>]">
+    <option value=<<currentTiddler>>><<currentTiddler>></option>
+  </$list>
+</$select><br/>
+
+<!-- Paso 2: Ingresar el valor numérico -->
+<$set name="selectedParam" value={{{ [<instance>get[obi:has_specified_value]] }}}>
+  <p><em>Value for : <strong><$link to=<<selectedParam>>><<selectedParam>></$link></strong>:</em></p>
+  <$macrocall 
+        $name="fhir-input-render"
+        fhir-input-type=<<selectedParam>>
+        instance=<<instance>>
+        obi-property="obi:has_specified_value"
+  />
+</$set>
+</$set>
+

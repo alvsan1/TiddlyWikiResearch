@@ -8,7 +8,7 @@ tags: $:/tags/Macro
     text=""
     tags="obi-instance"
     obi_class=<<__class__>>
-    about=<<__concept__>>
+    class=<<__concept__>>
     rdf:type=<<__class__>>
     obi_part_of=<<__investigation__>>
   />

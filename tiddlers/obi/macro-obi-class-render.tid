@@ -1,0 +1,23 @@
+title: macro-obi-class-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define obi-class-render()
+<$set name="instance" value=<<currentTiddler>>>
+<$set name="obiClass" value={{!!obi_class}}>
+<$set name="class" value={{!!class}}>
+<$let classValue=<<obiClass>>>
+<$set name="propList" filter="[[$:/config/obi/class-properties]get[text]jsonget<classValue>]">
+
+<$list filter="[<propList>split[ ]]">
+<div style="margin-bottom:1em; padding:0.3em 0.6em; border-bottom:1px solid #ddd;">
+  <$macrocall $name="obi-property-render" property=<<currentTiddler>> class=<<class>> instance=<<instance>>/>
+</div>
+</$list>
+
+</$set>
+</$let>
+</$set>
+</$set>
+</$set>
+\end

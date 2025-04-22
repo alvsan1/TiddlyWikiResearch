@@ -1,0 +1,13 @@
+title: macro-fhir-codeableconcept-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-codeableconcept(param instance)
+<p><strong><<param>> (CodeableConcept):</strong></p>
+<$select tiddler=<<instance>> field="<<param>>_code">
+  <option value="">(Seleccionar código)</option>
+  <$list filter="[tag[<<param>>-codes]]">
+    <option value=<<currentTiddler>>><<currentTiddler>></option>
+  </$list>
+</$select>
+\end

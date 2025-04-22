@@ -1,0 +1,44 @@
+title: macro-fhir-input-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+
+\define fhir-input-render(instance fhir-input-type obi-property)
+
+<$set name="paramTag" filter="[tag<__fhir-input-type__>]">
+<$set name="fhirType" filter="[<paramTag>split[.]first[]]">
+<$list filter="[<fhirType>match[fhir:Quantity]]" variable="match">
+  <$macrocall 
+      $name="render-fhir-quantity"
+      obi-property=<<__obi-property__>> 
+      instance=<<__instance__>>
+  />
+</$list>
+<$list filter="[<fhirType>match[fhir:CodeableConcept]]" variable="match">
+  <$macrocall 
+      $name="render-fhir-codeableconcept" 
+      obi-property=<<__obi-property__>> 
+      instance=<<__instance__>>
+  />
+</$list>
+<$list filter="[<fhirType>match[fhir:boolean]]" variable="match">
+  <$macrocall 
+      $name="render-fhir-boolean" 
+      obi-property=<<__obi-property__>> 
+      instance=<<__instance__>>
+  />
+</$list>
+<$list filter="[<fhirType>match[fhir:Identifier]]" variable="match">
+  <$macrocall 
+      $name="render-fhir-identifier" 
+      obi-property=<<__obi-property__>> 
+      instance=<<__instance__>>
+  />
+</$list>
+<$list filter="[<fhirType>!match[fhir:Quantity]!match[fhir:CodeableConcept]!match[fhir:boolean]!match[fhir:Identifier]]" variable="match">
+  <p><em>Tipo no soportado aún para: <strong><<fhirType>></strong></em></p>
+  <$edit-text tiddler=<<instance>> field="obi:has_specified_value_value" placeholder="Valor literal" />
+</$list>
+</$set>
+</$set>
+\end

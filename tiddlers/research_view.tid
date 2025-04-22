@@ -72,7 +72,7 @@ title: $:/linkedhealth/research_view
 
 ! Clasificación semántica
 <$set name="conceptName" value=<<currentTiddler>> >
-{{obi-class-selector-view}}
+{{obi-class-selector-view2}}
 
 {{list-obi-instances-by-investigation}}
 </$set>

@@ -1,0 +1,10 @@
+title: macro-fhir-identifier-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-identifier(obi-property instance)
+<p>System: 
+<$edit-text tiddler=<<instance>> field={{{ [<__obi-property__>addsuffix[_system]] }}} placeholder="https://domain/context/system" /> </p>
+<p>Value: 
+<$edit-text tiddler=<<instance>> field={{{ [<__obi-property__>addsuffix[_value]] }}} /></p>
+\end

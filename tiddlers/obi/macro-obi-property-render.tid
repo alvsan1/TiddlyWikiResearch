@@ -2,20 +2,29 @@ title: macro-obi-property-render
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define obi-property-render()
-<$set name="instance" value=<<currentTiddler>>>
-<$set name="obiClass" value={{!!obi_class}}>
-<$set name="about" value={{!!about}}>
-<$let classValue=<<obiClass>>>
-<$set name="propList" filter="[[$:/config/obi/class-properties]get[text]jsonget<classValue>]">
-<$list filter="[<propList>split[ ]]">
-<div style="margin-bottom:1em; padding:0.3em 0.6em; border-bottom:1px solid #ddd;">
-  <$macrocall $name="obi-property-field-render" property=<<currentTiddler>> about=<<about>> instance=<<instance>>/>
-</div>
-</$list>
-</$set>
-</$let>
-</$set>
-</$set>
-</$set>
+\define obi-property-render(property, class, instance)
+<strong>OBI property: </strong> <$link to=<<__property__>>><<__property__>></$link><br/>
+<$reveal type="match" text="obi:has_specified_value" default=<<__property__>>>
+     {{obi-property_has_specified_value}}
+</$reveal>
+<$reveal type="match" text="obi:is_about" default=<<__property__>>>
+     {{obi-property_is_about}}
+</$reveal>
+<$reveal type="match" text="obi:has_unit" default=<<__property__>>>
+     {{obi-property_has_specified_value}}
+</$reveal>
+<$reveal type="match" text="obi:has_attribute" default=<<__property__>>>
+  {{obi-property_has_attribute}}
+</$reveal>
+<$reveal type="nomatch" text="obi:is_about" default=<<__property__>>>
+  <$reveal type="nomatch" text="obi:has_specified_value" default=<<__property__>>>     
+    <$reveal type="nomatch" text="obi:has_attribute" default=<<__property__>>>
+      <!-- Campo genérico para cualquier propiedad no mapeada -->
+      NO MATCH
+      <$edit-text tiddler=<<currentTiddler>> field=<<__property__>> placeholder="Valor..." /><br/>
+    </$reveal>
+  </$reveal>
+</$reveal>
 \end
+
+

@@ -1,0 +1,22 @@
+title: obi-property_is_about
+type: text/vnd.tiddlywiki
+
+<!-- Paso 1: Seleccionar parámetro que sea de tipo Reference -->
+<p><strong>Seleccionar parámetro FHIR de tipo Reference para 'is about':</strong></p>
+<$set name="aboutConcept" value=<<class>>>
+<$select tiddler=<<instance>> field="obi:is_about">
+  <option value="">(Seleccionar parámetro de referencia)</option>
+  <$list filter="[tag<aboutConcept>] :intersection[[fhir:Reference]tags[]]">
+    <option value=<<currentTiddler>>><<currentTiddler>></option>
+  </$list>
+</$select><br/>
+
+
+
+<!-- Paso 2: Mostrar información del parámetro seleccionado -->
+<$set name="selectedAbout" value={{$instance!!obi:is_about}}>
+  <$list filter="[<selectedAbout>]">
+    <p><em>Este dato se refiere a: <strong><<selectedAbout>></strong></em></p>
+  </$list>
+</$set>
+</$set>
