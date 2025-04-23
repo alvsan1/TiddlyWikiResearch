@@ -1,0 +1,12 @@
+title: macro-fhir-string-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-string()
+<p>  
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__obi-property__>] }}}
+              type="text"
+              placeholder="Enter text..." />
+</p>
+\end

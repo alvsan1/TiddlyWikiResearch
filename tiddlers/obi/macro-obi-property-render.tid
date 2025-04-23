@@ -4,20 +4,20 @@ tags: $:/tags/Macro
 
 \define obi-property-render(property, class, instance)
 <strong>OBI property: </strong> <$link to=<<__property__>>><<__property__>></$link><br/>
-<$reveal type="match" text="obi:has_specified_value" default=<<__property__>>>
-     {{obi-property_has_specified_value}}
+<$reveal type="match" text="obi:has_value_specification" default=<<__property__>>>
+     {{obi-property_has_value_specification}}
 </$reveal>
 <$reveal type="match" text="obi:is_about" default=<<__property__>>>
      {{obi-property_is_about}}
 </$reveal>
 <$reveal type="match" text="obi:has_unit" default=<<__property__>>>
-     {{obi-property_has_specified_value}}
+     {{obi-property_has_value_specification}}
 </$reveal>
 <$reveal type="match" text="obi:has_attribute" default=<<__property__>>>
   {{obi-property_has_attribute}}
 </$reveal>
 <$reveal type="nomatch" text="obi:is_about" default=<<__property__>>>
-  <$reveal type="nomatch" text="obi:has_specified_value" default=<<__property__>>>     
+  <$reveal type="nomatch" text="obi:has_value_specification" default=<<__property__>>>     
     <$reveal type="nomatch" text="obi:has_attribute" default=<<__property__>>>
       <!-- Campo genérico para cualquier propiedad no mapeada -->
       NO MATCH

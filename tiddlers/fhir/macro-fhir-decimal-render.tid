@@ -1,0 +1,12 @@
+title: macro-fhir-decimal-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-decimal()
+<p>
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__obi-property__>] }}}
+              type="number"
+              placeholder="Enter a decimal value..." />
+</p>
+\end

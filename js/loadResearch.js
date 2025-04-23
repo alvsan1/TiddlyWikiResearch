@@ -81,6 +81,8 @@ exports.startup = function(callback) {
 	                //$tw.wiki.getTiddler("$:/linekedhealth/research_view");
 	                $tw.wiki.setText(titleResearch,"text",0,$tw.wiki.getTiddler("$:/linkedhealth/research_view").fields.text,"");
 	                $tw.wiki.setText(titleResearch,"research",0,"false","");
+	                $tw.wiki.addTiddler(new $tw.Tiddler($tw.wiki.getTiddler(titleResearch),{tags: ["research"]}))
+
 
 
 

@@ -2,7 +2,7 @@ title: $:/config/obi/class-properties
 type: application/json
 
 {
-  "obi:measurement_datum": ["obi:has_specified_value", "obi:is_about"],
+  "obi:measurement_datum": ["obi:has_value_specification", "obi:is_about"],
   "obi:diagnosis": ["obi:is_about", "obi:has_part"],
   "obi:planned_process": ["obi:is_about", "obi:has_agent", "obi:has_part", "obi:has_specified_time"]
 }

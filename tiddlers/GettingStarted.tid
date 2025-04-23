@@ -1,0 +1,39 @@
+title: $:/core/ui/Components/GettingStarted
+type: text/vnd.tiddlywiki
+tags: $:/tags/Component
+created: 20250423001303
+modified: 20250423001303
+
+<div class="tc-subtitle">Plataforma de investigación clínica semántica</div>
+
+<div class="tc-tiddler-body">
+
+<p>Bienvenido al entorno de investigación basado en tecnologías semánticas, FHIR y SNOMED CT. Aquí podrás crear, explorar y desarrollar investigaciones clínicas de forma estructurada y colaborativa.</p>
+
+<hr/>
+
+<div class="tc-button-bar">
+  <<newTiddler 
+    buttonLabel="➕ Crear nueva investigación"
+    newTitle="Investigación $(currentTiddler)$"
+    tag="research"
+    template="$:/linkedhealth/research_view"
+    field:research="true"
+    field:created={!!modified} 
+  >>
+</div>
+
+<div class="tc-subtitle" style="margin-top: 1em;">📚 Investigaciones en curso</div>
+
+<$list filter="[tag[research]sort[modified]]">
+  <div class="tc-button-bar">
+    <$link to=<<currentTiddler>>>
+      <span class="tc-btn-internal">
+        <strong>{!!title}</strong><br/>
+        <small>Modificado: {!!modified}</small>
+      </span>
+    </$link>
+  </div>
+</$list>
+
+</div>

@@ -1,0 +1,13 @@
+title: macro-fhir-date-render
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+
+\define render-fhir-date(param instance)
+<p>
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__param__>] }}}
+              type="date"
+              placeholder="YYYY-MM-DD" />
+</p>
+\end

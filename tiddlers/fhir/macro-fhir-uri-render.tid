@@ -1,0 +1,8 @@
+\define fhir-uri-render()
+<p>
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__obi-property__>] }}}
+              type="url"
+              placeholder="https://example.org/resource" />
+</p>
+\end

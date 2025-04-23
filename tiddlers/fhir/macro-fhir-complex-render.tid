@@ -1,0 +1,9 @@
+\define fhir-complex-render()
+<$list filter="[tag<{{!!fhirType}}>]">
+  <h4>{{!!title}}</h4>
+  <$macrocall $name="fhir-input-render"
+              fhirType={{!!fhirType}}
+              instance=<<instance>>
+              __obi-property__={{!!title}} />
+</$list>
+\end

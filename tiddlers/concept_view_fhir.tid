@@ -12,6 +12,16 @@ title: $:/linkedhealth/concept_view/fhir
 
 \define viewrelations()
 
+<$button>
+  <$action-setfield $tiddler=<<currentTiddler>> $field="know" $value={{{ [<currentTiddler>get[know]match[true]then[false]else[true]] }}}/>
+  <$list filter="[<currentTiddler>get[know]match[true]]">
+    Desactivar conocimiento
+  </$list>
+  <$list filter="[<currentTiddler>get[know]!match[true]]">
+    Activar conocimiento
+  </$list>
+</$button>
+
 <table class="fhir-parameters">
 <tr>
   <th>Parámetro</th>
