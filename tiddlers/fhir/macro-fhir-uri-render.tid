@@ -1,4 +1,8 @@
-\define fhir-uri-render()
+title: macro-render-fhir-uri
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define marco-render-fhir-uri()
 <p>
   <$edit-text tiddler=<<instance>>
               field={{{ [<__obi-property__>] }}}

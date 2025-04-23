@@ -4,58 +4,22 @@ tags: $:/tags/Macro
 
 
 \define fhir-input-render(instance fhir-input-type obi-property)
-
 <$set name="paramTag" filter="[tag<__fhir-input-type__>]">
 <$set name="fhirType" filter="[<paramTag>split[.]first[]]">
-<$list filter="[<fhirType>match[fhir:Quantity]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-quantity"
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:CodeableConcept]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-codeableconcept" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:boolean]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-boolean" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:decimal]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-decimal" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:date]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-date" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:string]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-string" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
-<$list filter="[<fhirType>match[fhir:Identifier]]" variable="match">
-  <$macrocall 
-      $name="render-fhir-identifier" 
-      obi-property=<<__obi-property__>> 
-      instance=<<__instance__>>
-  />
-</$list>
+<$set name="normalizedType" filter="[<fhirType>split[:]join[-]]">
+  <$set name="possibleMacro" filter="[<normalizedType>addprefix[render-]]">
+  <$set name="searchMacro" filter="[<possibleMacro>addprefix[macro-]]">
+    <!-- Verifica si la macro existe -->
+    <$set name="renderMacro" filter="[<searchMacro>is[shadow]then<possibleMacro>else[render-fhir-complex]]">
+      <$macrocall 
+          $name=<<renderMacro>> 
+          obi-property=<<__obi-property__>> 
+          instance=<<__instance__>>
+          fhir-type=<<fhirType>>
+      />
+    </$set>
+  </$set>
+</$set>
 </$set>
 </$set>
 \end
