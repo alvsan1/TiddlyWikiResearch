@@ -1,4 +1,4 @@
-title: macro-fhir-input-render
+title: macro-render-fhir-input
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
@@ -13,9 +13,9 @@ tags: $:/tags/Macro
     <$set name="renderMacro" filter="[<searchMacro>is[shadow]then<possibleMacro>else[render-fhir-complex]]">
       <$macrocall 
           $name=<<renderMacro>> 
-          obi-property=<<__obi-property__>> 
-          instance=<<__instance__>>
-          fhir-type=<<fhirType>>
+          obi-property=<<__obi-property__>>
+          instance=<<instance>>
+          fhir-input-type=<<__fhir-input-type__>>
       />
     </$set>
   </$set>

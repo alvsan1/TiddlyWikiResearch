@@ -5,7 +5,7 @@ tags: $:/tags/Macro
 \define render-fhir-decimal()
 <p>
   <$edit-text tiddler=<<instance>>
-              field={{{ [<__obi-property__>] }}}
+              field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
               type="number"
               placeholder="Enter a decimal value..." />
 </p>

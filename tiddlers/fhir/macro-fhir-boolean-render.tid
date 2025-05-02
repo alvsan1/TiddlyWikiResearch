@@ -1,7 +1,0 @@
-title: macro-render-fhir-boolean
-type: text/vnd.tiddlywiki
-tags: $:/tags/Macro
-
-\define render-fhir-boolean(param instance)
-<$checkbox tiddler=<<instance>> tag="true" field="<<param>>_value">Sí / No</$checkbox>
-\end

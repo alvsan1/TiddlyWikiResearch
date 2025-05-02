@@ -2,11 +2,10 @@ title: macro-render-fhir-date
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-
-\define render-fhir-date(param instance)
+\define render-fhir-date(fhir-input-type obi-property instance)
 <p>
   <$edit-text tiddler=<<instance>>
-              field={{{ [<__param__>] }}}
+              field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
               type="date"
               placeholder="YYYY-MM-DD" />
 </p>
