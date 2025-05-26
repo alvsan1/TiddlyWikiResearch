@@ -1,6 +1,10 @@
 title: $:/linkedhealth/research_view
 
-\define my-actions()
+\define save-research()
+  <$transclude $variable="persist" /> 
+\end
+
+\define research()
   <$transclude $variable="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
 \end
 
@@ -35,19 +39,19 @@ title: $:/linkedhealth/research_view
 
 <$edit-text tiddler="$:/state/nuevoAutorTemp" field="autor" placeholder="Escribe un nombre..." style="width:80%;" />
 <$button>
-  <$wikify name="autoresActualizados" text={{{ [{!!autores}addsuffix[|]addsuffix{$:/state/nuevoAutorTemp!!autor}] }}}>
-    <$action-setfield $tiddler=<<currentTiddler>> $field="autores" $value=<<autoresActualizados>> />
+  <$wikify name="autoresActualizados" text={{{ [{!!authors}addsuffix[|]addsuffix{$:/state/nuevoAutorTemp!!autor}] }}}>
+    <$action-setfield $tiddler=<<currentTiddler>> $field="authors" $value=<<autoresActualizados>> />
   </$wikify>
   <$action-deletetiddler $tiddler="$:/state/nuevoAutorTemp" />
   ➕ Agregar Autor
 </$button>
 
 !! Autores Actuales:
-<$list filter="[{!!autores}split[|]!is[blank]]" variable="autor">
+<$list filter="[{!!authors}split[|]!is[blank]]" variable="autor">
   <div>
     <span><<autor>></span>
     <$button class="tc-btn-invisible">
-      <$action-setfield $tiddler=<<currentTiddler>> $field="autores" $value={{{ [{!!autores}split[|]remove<autor>join[|]] }}}/>
+      <$action-setfield $tiddler=<<currentTiddler>> $field="authors" $value={{{ [{!!authors}split[|]remove<autor>join[|]] }}}/>
       🗑️
     </$button>
   </div>
@@ -79,8 +83,15 @@ title: $:/linkedhealth/research_view
 
 <$tiddlymap view={{!!titleResearch}} editor="advanced" height="450px" />
 
-<$button actions=<<my-actions>> >
+<$button actions=<<research>> >
 
 Research!
 
+</$button>
+
+<$button disabled={{{ [<currentTiddler>get[save]match[true]then[yes]else[no]] }}}>
+  <$action-setfield $field="save" $value="true"/>
+  <$list filter="[<currentTiddler>get[save]match[true]]" emptyMessage="Grabar">
+         Grabar Activado ✓
+  </$list>
 </$button>

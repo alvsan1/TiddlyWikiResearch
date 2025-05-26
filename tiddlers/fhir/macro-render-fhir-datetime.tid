@@ -1,0 +1,12 @@
+title: macro-render-fhir-datetime
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-dateTime(fhir-input-type obi-property instance)
+<p>
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
+              type="datetime-local"
+              placeholder="YYYY-MM-DDTHH:MM" />
+</p>
+\end

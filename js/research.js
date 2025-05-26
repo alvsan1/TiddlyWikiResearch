@@ -51,7 +51,7 @@ exports.run = function(titleResearch, view) {
 	$tw.wiki.addTiddler(nodeKw);
 
 
-	}
+}
 
 
 })();

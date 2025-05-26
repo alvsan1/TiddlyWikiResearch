@@ -1,0 +1,13 @@
+title: macro-render-fhir-code
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-code(fhir-input-type instance obi-property)
+<p>  
+  <<__fhir-input-type__>>:
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__fhir-input-type__>addsuffix[_code]] }}}
+              type="text"
+              placeholder="Enter text..." />
+</p>
+\end

@@ -1,8 +1,5 @@
-title: $:/core/ui/Components/GettingStarted
+title: Welcome
 type: text/vnd.tiddlywiki
-tags: $:/tags/GettingStarted
-created: 20250423001303
-modified: 20250423001303
 
 <div class="tc-subtitle">Plataforma de investigación clínica semántica</div>
 
@@ -13,14 +10,14 @@ modified: 20250423001303
 <hr/>
 
 <div class="tc-button-bar">
-  <<newTiddler 
-    buttonLabel="➕ Crear nueva investigación"
-    newTitle="Investigación $(currentTiddler)$"
-    tag="research"
-    template="$:/linkedhealth/research_view"
-    field:research="true"
-    field:created={!!modified} 
-  >>
+  <$button class="tc-btn-big-green">
+    ➕ Crear nueva investigación
+    <$action-sendmessage $message="tm-new-tiddler" 
+      tags="research"
+      template="$:/linkedhealth/research_view"
+      research="true"
+      created={{!!modified}} />
+  </$button>
 </div>
 
 <div class="tc-subtitle" style="margin-top: 1em;">📚 Investigaciones en curso</div>
@@ -29,8 +26,8 @@ modified: 20250423001303
   <div class="tc-button-bar">
     <$link to=<<currentTiddler>>>
       <span class="tc-btn-internal">
-        <strong>{!!title}</strong><br/>
-        <small>Modificado: {!!modified}</small>
+        <strong>{{!!title}}</strong><br/>
+        <small>Modificado: {{!!modified}}</small>
       </span>
     </$link>
   </div>
