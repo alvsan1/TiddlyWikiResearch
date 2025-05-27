@@ -50,7 +50,9 @@ function tiddlerToTTL(tiddlerRow) {
 
 
 async function obiInstancesToTTL(researchTitle) {
-  var instances = $tw.wiki.filterTiddlers("[tag[obi-instance]obi_part_of["+ researchTitle+"]!prefix[Draft of ]]");
+  const instances = $tw.wiki.filterTiddlers("[tag[obi-instance]obi_part_of[" + researchTitle + "]!prefix[Draft of ]]");
+
+  const seenCodings = new Map(); // Clave única por código + sistema
 
   for (const title of instances) {
     const t = $tw.wiki.getTiddler(title).fields;
@@ -58,8 +60,7 @@ async function obiInstancesToTTL(researchTitle) {
     const subj = namedNode(base + encodeURIComponent(title.replace(/\s+/g, "_")));
 
     const writer = new Writer({
-      prefixes: {
-      }
+      prefixes: {}
     });
 
     // rdf:type
@@ -75,20 +76,38 @@ async function obiInstancesToTTL(researchTitle) {
     // obi:part_of
     writer.addQuad(
       subj,
-      namedNode("http://purl.obolibrary.org/obo/OBI_0000312"), // obi:part_of
+      namedNode("http://purl.obolibrary.org/obo/OBI_0000312"),
       namedNode("http://example.org/research/" + encodeURIComponent(researchTitle.replace(/\s+/g, "_")))
     );
 
-    // fhir:Coding como blank node
+    // fhir:Coding con IRI fijo en lugar de blank node
     if (t["fhir:Coding.code_code"] && t["fhir:Coding.system_uri"]) {
-      const b = blankNode();
-      writer.addQuad(subj, namedNode("http://purl.obolibrary.org/obo/OBI_0001938"), b); // obi:has_value_specification
-      writer.addQuad(b, namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), namedNode("http://hl7.org/fhir/Coding"));
-      writer.addQuad(b, namedNode("http://hl7.org/fhir/code"), literal(t["fhir:Coding.code_code"]));
-      writer.addQuad(b, namedNode("http://hl7.org/fhir/system"), namedNode(t["fhir:Coding.system_uri"]));
-      if ("fhir:Coding.userSelected_value" in t) {
-        writer.addQuad(b, namedNode("http://hl7.org/fhir/userSelected"), literal(t["fhir:Coding.userSelected_value"], namedNode("http://www.w3.org/2001/XMLSchema#boolean")));
+      const codingBase = "http://example.org/coding/";
+      // Crear un IRI único basado en el código y sistema
+      const uriParts = t["fhir:Coding.system_uri"].split('/').filter(Boolean);
+      const codeSystem = uriParts[uriParts.length - 1];
+      const codingId = `${encodeURIComponent(codeSystem)}-${encodeURIComponent(t["fhir:Coding.code_code"])}`;
+      const codingIRI = namedNode(codingBase + codingId);
+
+      // Solo añadir la definición del Coding si no lo hemos visto antes
+      if (!seenCodings.has(codingId)) {
+        seenCodings.set(codingId, true);
+        
+        writer.addQuad(codingIRI, namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), namedNode("http://hl7.org/fhir/Coding"));
+        writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/code"), literal(t["fhir:Coding.code_code"]));
+        writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/system"), namedNode(t["fhir:Coding.system_uri"]));
+        
+        if ("fhir:Coding.userSelected_value" in t) {
+          writer.addQuad(
+            codingIRI,
+            namedNode("http://hl7.org/fhir/userSelected"),
+            literal(t["fhir:Coding.userSelected_value"], namedNode("http://www.w3.org/2001/XMLSchema#boolean"))
+          );
+        }
       }
+
+      // Añadir la relación entre la instancia y el Coding
+      writer.addQuad(subj, namedNode("http://purl.obolibrary.org/obo/OBI_0001938"), codingIRI);
     }
 
     // obo:IAO_0000136 (is_about)
@@ -100,17 +119,19 @@ async function obiInstancesToTTL(researchTitle) {
       );
     }
 
-    // Finalización del bloque TTL
-    return new Promise((resolve, reject) => {
+    // Serialización
+    await new Promise((resolve, reject) => {
       writer.end((err, result) => {
         if (err) reject(err);
-        else persistToJena( result);
+        else {
+          persistToJena(result);
+          resolve();
+        }
       });
     });
   }
-
-  ;
 }
+
 
 function persistToJena(ttl) {
 
