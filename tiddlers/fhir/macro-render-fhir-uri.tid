@@ -2,11 +2,11 @@ title: macro-render-fhir-uri
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-uri()
+\define render-fhir-uri(fhir-input-type instance obi-property fhir-path)
 <p>
-  <<__fhir-input-type__>>:
+<<__fhir-path__>> :
   <$edit-text tiddler=<<instance>>
-              field={{{ [<__fhir-input-type__>addsuffix[_uri]] }}}
+              field={{{ [<__fhir-path__>] }}}
               type="url"
               placeholder="https://example.org/resource" />
 </p>

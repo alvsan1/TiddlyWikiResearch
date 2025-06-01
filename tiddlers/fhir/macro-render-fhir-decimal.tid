@@ -2,10 +2,11 @@ title: macro-render-fhir-decimal
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-decimal()
+\define render-fhir-decimal(fhir-input-type instance obi-property fhir-path)
 <p>
+<<__fhir-path__>> :
   <$edit-text tiddler=<<instance>>
-              field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
+              field={{{ [<__fhir-path__>] }}}
               type="number"
               placeholder="Enter a decimal value..." />
 </p>

@@ -2,11 +2,11 @@ title: macro-render-fhir-string
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-string(fhir-input-type instance obi-property)
+\define render-fhir-string(fhir-input-type instance obi-property fhir-path)
 <p>  
-  <<__fhir-input-type__>>:
+<<__fhir-path__>> :
   <$edit-text tiddler=<<instance>>
-              field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
+              field={{{ [<__fhir-path__>] }}}
               type="text"
               placeholder="Enter text..." />
 </p>

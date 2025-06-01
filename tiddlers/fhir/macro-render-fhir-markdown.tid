@@ -1,14 +1,13 @@
-title: macro-render-fhir-code
+title: macro-render-fhir-markdown
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-code(fhir-input-type instance obi-property fhir-path)
+\define render-fhir-markdown(fhir-input-type instance obi-property fhir-path)
 <p>  
 <<__fhir-path__>> :
-
   <$edit-text tiddler=<<instance>>
               field={{{ [<__fhir-path__>] }}}
               type="text"
-              placeholder="Enter text..." />
+              placeholder="Enter the markdown text..." />
 </p>
 \end

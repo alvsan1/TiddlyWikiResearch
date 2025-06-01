@@ -51,12 +51,10 @@ function tiddlerToTTL(tiddlerRow) {
 
 async function obiInstancesToTTL(researchTitle) {
   const instances = $tw.wiki.filterTiddlers("[tag[obi-instance]obi_part_of[" + researchTitle + "]!prefix[Draft of ]]");
-
-  const seenCodings = new Map(); // Clave única por código + sistema
+  const base = "http://example.org/instance/";
 
   for (const title of instances) {
-    const t = $tw.wiki.getTiddler(title).fields;
-    const base = "http://example.org/instance/";
+    const t = $tw.wiki.getTiddler(title).fields;    
     const subj = namedNode(base + encodeURIComponent(title.replace(/\s+/g, "_")));
 
     const writer = new Writer({
@@ -77,10 +75,11 @@ async function obiInstancesToTTL(researchTitle) {
     writer.addQuad(
       subj,
       namedNode("http://purl.obolibrary.org/obo/OBI_0000312"),
-      namedNode("http://example.org/research/" + encodeURIComponent(researchTitle.replace(/\s+/g, "_")))
+      namedNode("http://example.org/research/" + encodeURIComponent(researchTitle.replace(/\s+/g, "_").toLowerCase()))
     );
 
-    // fhir:Coding con IRI fijo en lugar de blank node
+    /*
+    // fhir:Coding con IRI fijo en lugar de blank node, elimina duplicidades
     if (t["fhir:Coding.code_code"] && t["fhir:Coding.system_uri"]) {
       const codingBase = "http://example.org/coding/";
       // Crear un IRI único basado en el código y sistema
@@ -96,6 +95,9 @@ async function obiInstancesToTTL(researchTitle) {
         writer.addQuad(codingIRI, namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), namedNode("http://hl7.org/fhir/Coding"));
         writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/code"), literal(t["fhir:Coding.code_code"]));
         writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/system"), namedNode(t["fhir:Coding.system_uri"]));
+        writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/display"), namedNode(t["fhir:Coding.dislpay_value"]));
+        writer.addQuad(codingIRI, namedNode("http://hl7.org/fhir/userSelected"), namedNode(t["fhir:Coding.userSelected_value"]));
+
         
         if ("fhir:Coding.userSelected_value" in t) {
           writer.addQuad(
@@ -108,7 +110,33 @@ async function obiInstancesToTTL(researchTitle) {
 
       // Añadir la relación entre la instancia y el Coding
       writer.addQuad(subj, namedNode("http://purl.obolibrary.org/obo/OBI_0001938"), codingIRI);
+    }*/
+
+
+
+    if (Object.keys(t).some(k => k.startsWith("fhir:"))) {
+
+      // Construcción del ID único
+      const instance = t["title"].replace(/\s+/g, "_");
+      const instanceId = `${encodeURIComponent(instance)}`;
+      const codingIRI = namedNode(base + "has_value_specification/"+instanceId);
+
+      writer.addQuad(codingIRI, namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), namedNode("http://hl7.org/fhir/Coding"));
+
+      // Recorremos todos los campos fhir:Coding.*
+      for (const [key, value] of Object.entries(t)) {
+        if (!key.startsWith("fhir")) continue;
+
+        const propName = key.replace("fhir:", ""); // ej. 'code', 'system'
+        const predicate = namedNode(`http://hl7.org/fhir/${propName}`);
+        writer.addQuad(codingIRI, predicate, literal(value));
+      }
+
+      // Relación entre la instancia y el código
+      writer.addQuad(subj, namedNode("http://purl.obolibrary.org/obo/OBI_0001938"), codingIRI);
     }
+
+
 
     // obo:IAO_0000136 (is_about)
     if (t["obi:has_value_specification"] && t["class"]) {

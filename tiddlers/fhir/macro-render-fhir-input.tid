@@ -2,22 +2,33 @@ title: macro-render-fhir-input
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-
-\define fhir-input-render(instance fhir-input-type obi-property)
+\define fhir-input-render(instance fhir-input-type obi-property fhir-path:"" )
 <$set name="paramTag" filter="[tag<__fhir-input-type__>]">
-<$set name="fhirType" filter="[<paramTag>split[.]first[]]">
-<$set name="normalizedType" filter="[<fhirType>split[:]join[-]]">
+<$set name="fhirType" filter="[<__fhir-input-type__>split[.]first[]]">
+<$set name="normalizedType" filter="[<__fhir-input-type__>split[:]join[-]]">
   <$set name="possibleMacro" filter="[<normalizedType>addprefix[render-]]">
   <$set name="searchMacro" filter="[<possibleMacro>addprefix[macro-]]">
-    <!-- Verifica si la macro existe -->
-    <$set name="renderMacro" filter="[<searchMacro>is[shadow]then<possibleMacro>else[render-fhir-complex]]">
-      <$macrocall 
-          $name=<<renderMacro>> 
-          obi-property=<<__obi-property__>>
-          instance=<<instance>>
-          fhir-input-type=<<__fhir-input-type__>>
-      />
-    </$set>
+
+      <!-- Si no hay fhir-path, usar el fhir-input-type sin el prefijo fhir: -->
+      <$set name="pathFinal" filter="[<__fhir-path__>!match[]then<__fhir-path__>else<__fhir-input-type__>]">
+
+        
+        <!-- normalizedType : <<normalizedType>> -->
+        <!-- possibleMacro : <<possibleMacro>> -->
+        <!-- searchMacro : <<searchMacro>> -->
+        
+        <$set name="renderMacro" filter="[<searchMacro>is[shadow]then<possibleMacro>else[render-fhir-complex]]">
+        <!-- <<renderMacro>> ! -->
+          <$macrocall
+            $name=<<renderMacro>>
+            obi-property=<<__obi-property__>>
+            instance=<<__instance__>>
+            fhir-input-type=<<__fhir-input-type__>>
+            fhir-path=<<pathFinal>>
+          />
+        </$set>
+      </$set>
+  </$set>
   </$set>
 </$set>
 </$set>

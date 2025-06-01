@@ -2,13 +2,24 @@ title: macro-render-fhir-complex
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-complex(fhir-input-type obi-property instance)
-
+\define render-fhir-complex(fhir-input-type obi-property instance fhir-path:"")
 <$list filter="[tag<__fhir-input-type__>]">
-  <$macrocall $name="fhir-input-render"
-              fhir-input-type={{!!title}}
-              instance=<<instance>>
-              obi-property= <<__obi-property__>>
-/>
+  <$set name="isProperty" filter="[<currentTiddler>regexp[\.]]">
+  <$set name="propertyName" filter="[<currentTiddler>split[.]last[]]">
+
+    <!-- currentTiddler: <<currentTiddler>> | isProperty: <<isProperty>> | propertyName: <<propertyName>> | fhir-path recibido: <<__fhir-path__>>| -->
+    
+    <!-- Construir el nuevo path basado en si es propiedad o tipo -->
+    <$set name="newPath" filter="[<isProperty>!match[]then<__fhir-path__>addsuffix[.]addsuffix<propertyName>else<__fhir-path__>]">
+    <!-- <<newPath>> -->
+      <$macrocall $name="fhir-input-render"
+        fhir-input-type={{!!title}}
+        instance=<<__instance__>>
+        obi-property=<<__obi-property__>>
+        fhir-path=<<newPath>>
+      />
+    </$set>
+  </$set>
+  </$set>
 </$list>
 \end

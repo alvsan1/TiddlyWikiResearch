@@ -2,10 +2,11 @@ title: macro-render-fhir-boolean
 type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
-\define render-fhir-boolean(fhir-input-type instance obi-property)
-<<__fhir-input-type__>>: 
+\define render-fhir-boolean(fhir-input-type instance obi-property fhir-path)
+<p>  
+<<__fhir-path__>> :
 <$checkbox tiddler=<<__instance__>> 
-           field={{{ [<__fhir-input-type__>addsuffix[_value]] }}}
+           field={{{ [<__fhir-path__>] }}}
            checked="true" 
            unchecked="false">Sí / No</$checkbox>
 \end

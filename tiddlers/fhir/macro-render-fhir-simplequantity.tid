@@ -1,0 +1,13 @@
+title: macro-render-fhir-SimpleQuantity
+type: text/vnd.tiddlywiki
+tags: $:/tags/Macro
+
+\define render-fhir-SimpleQuantity(fhir-input-type instance obi-property fhir-path)
+<p>
+<<__fhir-path__>> :
+  <$edit-text tiddler=<<instance>>
+              field={{{ [<__fhir-path__>] }}}
+              type="number"
+              placeholder="Enter a quantity value..." />
+</p>
+\end
