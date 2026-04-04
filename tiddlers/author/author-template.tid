@@ -1,0 +1,16 @@
+title: $:/linkedhealth/author-template
+tags: $:/tags/ViewTemplate
+list-before: $:/core/ui/ViewTemplate/body
+
+<$list filter="[all[current]tag[author]]" variable="ignore">
+<div class="tc-tiddler-body">
+
+! <$view field="rdfs:label"/>
+
+|!Tipo |`foaf:Person` |
+|!Rol |<$set name="role" value={{!!ro:0000087}}><$list filter="[<role>match[obi:0000103]]" emptyMessage=""><$list filter="[<role>match[obi:0000202]]" emptyMessage="—">Investigador Principal (obi:0000103)</$list></$list><$list filter="[<role>match[obi:0000202]]" emptyMessage="">Co-Investigador (obi:0000202)</$list></$set> |
+|!ORCID |<$list filter="[all[current]has[orcid]]" emptyMessage="—"><$view field="orcid"/></$list> |
+|!Investigación |<$link to={{!!part_of}}><$view field="part_of"/></$link> |
+
+</div>
+</$list>

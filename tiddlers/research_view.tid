@@ -1,16 +1,31 @@
 title: $:/linkedhealth/research_view
 
 \define save-research()
-  <$transclude $variable="persist" /> 
+  <$transclude $variable="persist" />
 \end
 
 \define research()
-  <$transclude $variable="research" titleResearch={{!!title}} view={{!!titleresearch}}/>	
+  <$transclude $variable="research" titleResearch={{!!title}} view={{!!titleresearch}}/>
 \end
 
 
 \define add-node-to-view-main()
    <$transclude $variable="addNodeToView" nodeName={{$:/state/newNodeTemp!!node}} main=true nodeGraph={{$:/state/newNodeTemp!!nodegraph}} view={{!!titleResearch}}/>
+\end
+
+\define add-author()
+<$wikify name="authorTitle" text={{{ [[$:/state/nuevoAutorTemp]get[name]addprefix[agent/]] }}}>
+  <$action-setfield $tiddler=<<authorTitle>>
+    rdfs:label={{$:/state/nuevoAutorTemp!!name}}
+    rdf:type="foaf:Person"
+    ro:0000087={{$:/state/nuevoAutorTemp!!role}}
+    orcid={{$:/state/nuevoAutorTemp!!orcid}}
+    part_of=<<currentTiddler>>
+  />
+  <$action-listops $tiddler=<<authorTitle>> $field="tags" $subfilter="+[append[author]append<currentTiddler>]"/>
+  <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
+  <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
+</$wikify>
 \end
 
 
@@ -37,21 +52,35 @@ title: $:/linkedhealth/research_view
 
 !! Gestión de Autores
 
-<$edit-text tiddler="$:/state/nuevoAutorTemp" field="autor" placeholder="Escribe un nombre..." style="width:80%;" />
-<$button>
-  <$wikify name="autoresActualizados" text={{{ [{!!authors}addsuffix[|]addsuffix{$:/state/nuevoAutorTemp!!autor}] }}}>
-    <$action-setfield $tiddler=<<currentTiddler>> $field="authors" $value=<<autoresActualizados>> />
-  </$wikify>
-  <$action-deletetiddler $tiddler="$:/state/nuevoAutorTemp" />
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="name" placeholder="Nombre completo del autor..." style="width:80%;display:block;" />
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="orcid" placeholder="ORCID (opcional, ej: 0000-0001-2345-6789)..." style="width:80%;display:block;" />
+<$select tiddler="$:/state/nuevoAutorTemp" field="role" default="obi:0000202">
+  <option value="obi:0000103">Investigador Principal</option>
+  <option value="obi:0000202">Co-Investigador</option>
+</$select>
+<$button actions=<<add-author>>>
   ➕ Agregar Autor
 </$button>
 
 !! Autores Actuales:
-<$list filter="[{!!authors}split[|]!is[blank]]" variable="autor">
+<$list filter="[tag[author]tag<currentTiddler>]" variable="autorTiddler">
   <div>
-    <span><<autor>></span>
+    <$link to=<<autorTiddler>>><$view tiddler=<<autorTiddler>> field="rdfs:label"/></$link>
+    <$set name="autorRole" value={{{ [<autorTiddler>get[ro:0000087]] }}}>
+      <$list filter="[<autorRole>match[obi:0000103]]" emptyMessage="">
+        &nbsp;— Investigador Principal
+      </$list>
+      <$list filter="[<autorRole>match[obi:0000202]]" emptyMessage="">
+        &nbsp;— Co-Investigador
+      </$list>
+    </$set>
+    <$set name="autorOrcid" value={{{ [<autorTiddler>get[orcid]] }}}>
+      <$list filter="[<autorOrcid>!is[blank]]" emptyMessage="">
+        &nbsp;(ORCID: <<autorOrcid>>)
+      </$list>
+    </$set>
     <$button class="tc-btn-invisible">
-      <$action-setfield $tiddler=<<currentTiddler>> $field="authors" $value={{{ [{!!authors}split[|]remove<autor>join[|]] }}}/>
+      <$action-deletetiddler $tiddler=<<autorTiddler>> />
       🗑️
     </$button>
   </div>
