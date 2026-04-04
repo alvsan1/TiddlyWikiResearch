@@ -6,12 +6,10 @@ module-type: startup
 \*/
 
 
-const N3 = require('n3');
-const { DataFactory, Writer } = N3;
-const { namedNode, literal, blankNode } = DataFactory;
-
 const SPARQL_UPDATE_URL = "http://192.168.1.134:3030/obi-instance/"; // Endpoint de Apache Jena
-	
+
+var N3, DataFactory, Writer, namedNode, literal, blankNode;
+
 function tiddlerToTTL(tiddlerRow) {
 	let tiddler = JSON.parse(tiddlerRow)
 	const base = "http://example.org/research/";
@@ -217,6 +215,13 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 
 	exports.startup = function(callback) {
+
+		N3 = require('n3');
+		DataFactory = N3.DataFactory;
+		Writer = N3.Writer;
+		namedNode = DataFactory.namedNode;
+		literal = DataFactory.literal;
+		blankNode = DataFactory.blankNode;
 
 		$tw.wiki.addEventListener("change",function(changes) {
 			try {
