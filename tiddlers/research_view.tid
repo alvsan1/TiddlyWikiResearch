@@ -22,7 +22,6 @@ title: $:/linkedhealth/research_view
   ro:0000087={{$:/state/autorSelection!!role}}
 />
 <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value="" />
-<$action-setfield $tiddler="$:/state/autorSearch" $field="text" $value="" />
 \end
 
 \define create-author()
@@ -81,56 +80,57 @@ title: $:/linkedhealth/research_view
 
 !! Gestión de Autores
 
-!!! Buscar autor existente
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="name"
+  placeholder="Nombre del autor (busca existentes o ingresa uno nuevo)..."
+  style="width:80%;display:block;"/>
 
-<$edit-text tiddler="$:/state/autorSearch" field="text" placeholder="Buscar por nombre..." style="width:80%;display:block;"/>
-
-<$reveal type="nomatch" state="$:/state/autorSearch!!text" text="">
-<$list filter="[tag[author]search{$:/state/autorSearch!!text}limit[8]]" variable="foundAuthor">
-  <$set name="isSelected" value={{{ [[$:/state/autorSelection]get[selected]match<foundAuthor>then[yes]else[no]] }}}>
-    <$button class={{{ [<isSelected>match[yes]then[tc-btn-primary]else[]] }}}>
-      <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=<<foundAuthor>>/>
-      <$view tiddler=<<foundAuthor>> field="rdfs:label"/>
-      <$list filter="[<foundAuthor>get[orcid]!is[blank]]" variable="orcidVal" emptyMessage="">
-        &nbsp;(<$view tiddler=<<foundAuthor>> field="orcid"/>)
-      </$list>
-      <$list filter="[<isSelected>match[yes]]" variable="ignore" emptyMessage=""> ✓</$list>
-    </$button>
-  </$set>
+<$reveal type="nomatch" state="$:/state/nuevoAutorTemp!!name" text="">
+<$reveal type="match" state="$:/state/autorSelection!!selected" text="">
+<$list filter="[tag[author]search{$:/state/nuevoAutorTemp!!name}limit[8]]" variable="foundAuthor">
+  <$button class="tc-btn-invisible" style="display:block;text-align:left;padding:2px 6px;">
+    <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=<<foundAuthor>>/>
+    <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value=""/>
+    🔍 <$view tiddler=<<foundAuthor>> field="rdfs:label"/>
+    <$list filter="[<foundAuthor>has[orcid]]" variable="ignore" emptyMessage="">
+      &nbsp;— ORCID: <$view tiddler=<<foundAuthor>> field="orcid"/>
+    </$list>
+  </$button>
 </$list>
+</$reveal>
 </$reveal>
 
 <$reveal type="nomatch" state="$:/state/autorSelection!!selected" text="">
 <div>
-  Seleccionado: //<$view tiddler={{$:/state/autorSelection!!selected}} field="rdfs:label"/>//
-  <$select tiddler="$:/state/autorSelection" field="role" default="obi:0000202">
-    <option value="obi:0000103">Investigador Principal</option>
-    <option value="obi:0000202">Co-Investigador</option>
-  </$select>
-  <$button actions=<<add-participation>>>
-    ➕ Agregar a investigación
-  </$button>
+  ✓ //<$view tiddler={{$:/state/autorSelection!!selected}} field="rdfs:label"/>//
+  <$list filter="[{$:/state/autorSelection!!selected}has[orcid]]" variable="ignore" emptyMessage="">
+    &nbsp;— ORCID: <$view tiddler={{$:/state/autorSelection!!selected}} field="orcid"/>
+  </$list>
   <$button>
     <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=""/>
-    ✖ Cancelar
+    ✖ Cambiar
   </$button>
 </div>
 </$reveal>
 
-!!! Crear nuevo autor
-
-<$edit-text tiddler="$:/state/nuevoAutorTemp" field="name" placeholder="Nombre completo del autor..." style="width:80%;display:block;"/>
-<$edit-text tiddler="$:/state/nuevoAutorTemp" field="orcid" placeholder="ORCID (opcional, ej: 0000-0001-2345-6789)..." style="width:80%;display:block;"/>
+<$reveal type="match" state="$:/state/autorSelection!!selected" text="">
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="orcid"
+  placeholder="ORCID (opcional, ej: 0000-0001-2345-6789)..."
+  style="width:80%;display:block;"/>
 <$select tiddler="$:/state/nuevoAutorTemp" field="role" default="obi:0000202">
   <option value="obi:0000103">Investigador Principal</option>
   <option value="obi:0000202">Co-Investigador</option>
 </$select>
-<$button actions=<<create-author>>>
-  👤 Crear Autor
-</$button>
-<$button actions=<<create-and-add-author>>>
-  👤➕ Crear y Agregar a Investigación
-</$button>
+<$button actions=<<create-author>>>👤 Crear Autor</$button>
+<$button actions=<<create-and-add-author>>>👤➕ Crear y Agregar a Investigación</$button>
+</$reveal>
+
+<$reveal type="nomatch" state="$:/state/autorSelection!!selected" text="">
+<$select tiddler="$:/state/autorSelection" field="role" default="obi:0000202">
+  <option value="obi:0000103">Investigador Principal</option>
+  <option value="obi:0000202">Co-Investigador</option>
+</$select>
+<$button actions=<<add-participation>>>➕ Agregar a investigación</$button>
+</$reveal>
 
 !! Participantes en esta investigación:
 <$list filter="[tag[participation]field:part_of<currentTiddler>]" variable="partTiddler">
@@ -145,11 +145,13 @@ title: $:/linkedhealth/research_view
           &nbsp;— Co-Investigador
         </$list>
       </$set>
-      <$set name="personOrcid" value={{{ [<personTitle>get[orcid]] }}}>
-        <$list filter="[<personOrcid>!is[blank]]" variable="ignore" emptyMessage="">
-          &nbsp;(ORCID: <<personOrcid>>)
-        </$list>
-      </$set>
+      <$list filter="[<personTitle>has[orcid]]" variable="ignore" emptyMessage="">
+        <$set name="personOrcid" value={{{ [<personTitle>get[orcid]] }}}>
+          <$list filter="[<personOrcid>!is[blank]]" variable="ignore" emptyMessage="">
+            &nbsp;(ORCID: <<personOrcid>>)
+          </$list>
+        </$set>
+      </$list>
     </$set>
     <$button class="tc-btn-invisible">
       <$action-deletetiddler $tiddler=<<partTiddler>>/>
