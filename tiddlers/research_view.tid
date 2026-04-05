@@ -162,8 +162,8 @@ title: $:/linkedhealth/research_view
 
 !! Nodo principal :
 
-<$select tiddler="$:/state/newNodeTemp" field="nodegraph" default="default">
-  <option value="snomedct">SnomedCt</option>
+<$select tiddler="$:/state/newNodeTemp" field="nodegraph" default="snomedct">
+  <option value="snomedct">SnomedCT</option>
   <option value="fhir">FHIR</option>
 </$select>
 

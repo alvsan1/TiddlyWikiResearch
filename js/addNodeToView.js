@@ -31,19 +31,25 @@ Run the macro
 */
 exports.run = function(nodeName, main, nodeGraph, view) {
 	console.log("nodeName: " + nodeName + ", main: " + main + ", nodeGraph: " + nodeGraph + ", view: " + view );
+	if (!nodeName || !view) {
+        console.log("addNodeToView: nodeName o view vacíos, abortando");
+        return "";
+    }
 	// Paso 1: Asegurarse de que el nodo existe
     var nodeId = $tm.adapter.getId(nodeName);
     
     if (typeof nodeId === "undefined") {
         // Crear el tiddler primero
+        var templateTiddler = $tw.wiki.getTiddler("$:/linkedhealth/concept_view/" + nodeGraph);
+        var templateText = templateTiddler ? templateTiddler.fields.text : "";
         $tw.wiki.addTiddler(new $tw.Tiddler({
-            title: nodeName, 
+            title: nodeName,
             know: true,
             node: true,
             tags: ["concept-pending-class"],
             main : main,
             nodeGraph : nodeGraph,
-            text: $tw.wiki.getTiddler("$:/linkedhealth/concept_view/" + nodeGraph).fields.text
+            text: templateText
         }));
         
         // Forzar asignación de ID
