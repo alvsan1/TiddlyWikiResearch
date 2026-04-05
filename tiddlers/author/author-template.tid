@@ -2,15 +2,24 @@ title: $:/linkedhealth/author-template
 tags: $:/tags/ViewTemplate
 list-before: $:/core/ui/ViewTemplate/body
 
+\define roleLabel()
+<$set name="role" value={{!!ro:0000087}}>
+  <$list filter="[<role>match[obi:0000103]]" emptyMessage="">Investigador Principal</$list>
+  <$list filter="[<role>match[obi:0000202]]" emptyMessage="">Co-Investigador</$list>
+  <$list filter="[<role>!match[obi:0000103]!match[obi:0000202]!is[blank]]" emptyMessage=""><<role>></$list>
+</$set>
+\end
+
 <$list filter="[all[current]tag[author]]" variable="ignore">
 <div class="tc-tiddler-body">
 
 ! <$view field="rdfs:label"/>
 
-|!Tipo |`foaf:Person` |
-|!Rol |<$set name="role" value={{!!ro:0000087}}><$list filter="[<role>match[obi:0000103]]" emptyMessage=""><$list filter="[<role>match[obi:0000202]]" emptyMessage="—">Investigador Principal (obi:0000103)</$list></$list><$list filter="[<role>match[obi:0000202]]" emptyMessage="">Co-Investigador (obi:0000202)</$list></$set> |
+|!Identificador |`<<currentTiddler>>` |
+|!Tipo RDF |`foaf:Person` |
+|!Rol en investigación |<<roleLabel>> |
 |!ORCID |<$list filter="[all[current]has[orcid]]" emptyMessage="—"><$view field="orcid"/></$list> |
-|!Investigación |<$link to={{!!part_of}}><$view field="part_of"/></$link> |
+|!Investigación |<$list filter="[all[current]has[part_of]]" emptyMessage="—"><$link to={{!!part_of}}><$view field="part_of"/></$link></$list> |
 
 </div>
 </$list>

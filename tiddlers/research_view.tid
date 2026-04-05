@@ -14,18 +14,17 @@ title: $:/linkedhealth/research_view
 \end
 
 \define add-author()
-<$wikify name="authorTitle" text={{{ [[$:/state/nuevoAutorTemp]get[name]addprefix[agent/]] }}}>
-  <$action-setfield $tiddler=<<authorTitle>>
-    rdfs:label={{$:/state/nuevoAutorTemp!!name}}
-    rdf:type="foaf:Person"
-    ro:0000087={{$:/state/nuevoAutorTemp!!role}}
-    orcid={{$:/state/nuevoAutorTemp!!orcid}}
-    part_of=<<currentTiddler>>
-  />
-  <$action-listops $tiddler=<<authorTitle>> $field="tags" $subfilter="+[append[author]append<currentTiddler>]"/>
-  <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
-  <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
-</$wikify>
+<$action-createtiddler
+  $basetitle="agent/author"
+  tags="author"
+  rdfs:label={{$:/state/nuevoAutorTemp!!name}}
+  rdf:type="foaf:Person"
+  ro:0000087={{$:/state/nuevoAutorTemp!!role}}
+  orcid={{$:/state/nuevoAutorTemp!!orcid}}
+  part_of=<<currentTiddler>>
+/>
+<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
+<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
 \end
 
 
@@ -63,7 +62,7 @@ title: $:/linkedhealth/research_view
 </$button>
 
 !! Autores Actuales:
-<$list filter="[tag[author]tag<currentTiddler>]" variable="autorTiddler">
+<$list filter="[tag[author]field:part_of<currentTiddler>]" variable="autorTiddler">
   <div>
     <$link to=<<autorTiddler>>><$view tiddler=<<autorTiddler>> field="rdfs:label"/></$link>
     <$set name="autorRole" value={{{ [<autorTiddler>get[ro:0000087]] }}}>
