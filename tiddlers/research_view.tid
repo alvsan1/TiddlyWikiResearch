@@ -13,15 +13,45 @@ title: $:/linkedhealth/research_view
    <$transclude $variable="addNodeToView" nodeName={{$:/state/newNodeTemp!!node}} main=true nodeGraph={{$:/state/newNodeTemp!!nodegraph}} view={{!!titleResearch}}/>
 \end
 
-\define add-author()
+\define add-participation()
+<$action-createtiddler
+  $basetitle="participation/p"
+  tags="participation"
+  person={{$:/state/autorSelection!!selected}}
+  part_of=<<currentTiddler>>
+  ro:0000087={{$:/state/autorSelection!!role}}
+/>
+<$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value="" />
+<$action-setfield $tiddler="$:/state/autorSearch" $field="text" $value="" />
+\end
+
+\define create-author()
 <$action-createtiddler
   $basetitle="agent/author"
   tags="author"
   rdfs:label={{$:/state/nuevoAutorTemp!!name}}
   rdf:type="foaf:Person"
-  ro:0000087={{$:/state/nuevoAutorTemp!!role}}
   orcid={{$:/state/nuevoAutorTemp!!orcid}}
+/>
+<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
+<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
+\end
+
+\define create-and-add-author()
+<$action-createtiddler
+  $basetitle="agent/author"
+  $createdTitle="newAuthorTitle"
+  tags="author"
+  rdfs:label={{$:/state/nuevoAutorTemp!!name}}
+  rdf:type="foaf:Person"
+  orcid={{$:/state/nuevoAutorTemp!!orcid}}
+/>
+<$action-createtiddler
+  $basetitle="participation/p"
+  tags="participation"
+  person=<<newAuthorTitle>>
   part_of=<<currentTiddler>>
+  ro:0000087={{$:/state/nuevoAutorTemp!!role}}
 />
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
@@ -51,35 +81,78 @@ title: $:/linkedhealth/research_view
 
 !! Gestión de Autores
 
-<$edit-text tiddler="$:/state/nuevoAutorTemp" field="name" placeholder="Nombre completo del autor..." style="width:80%;display:block;" />
-<$edit-text tiddler="$:/state/nuevoAutorTemp" field="orcid" placeholder="ORCID (opcional, ej: 0000-0001-2345-6789)..." style="width:80%;display:block;" />
+!!! Buscar autor existente
+
+<$edit-text tiddler="$:/state/autorSearch" field="text" placeholder="Buscar por nombre..." style="width:80%;display:block;"/>
+
+<$reveal type="nomatch" state="$:/state/autorSearch!!text" text="">
+<$list filter="[tag[author]search{$:/state/autorSearch!!text}limit[8]]" variable="foundAuthor">
+  <$set name="isSelected" value={{{ [[$:/state/autorSelection]get[selected]match<foundAuthor>then[yes]else[no]] }}}>
+    <$button class={{{ [<isSelected>match[yes]then[tc-btn-primary]else[]] }}}>
+      <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=<<foundAuthor>>/>
+      <$view tiddler=<<foundAuthor>> field="rdfs:label"/>
+      <$list filter="[<foundAuthor>get[orcid]!is[blank]]" variable="orcidVal" emptyMessage="">
+        &nbsp;(<$view tiddler=<<foundAuthor>> field="orcid"/>)
+      </$list>
+      <$list filter="[<isSelected>match[yes]]" variable="ignore" emptyMessage=""> ✓</$list>
+    </$button>
+  </$set>
+</$list>
+</$reveal>
+
+<$reveal type="nomatch" state="$:/state/autorSelection!!selected" text="">
+<div>
+  Seleccionado: //<$view tiddler={{$:/state/autorSelection!!selected}} field="rdfs:label"/>//
+  <$select tiddler="$:/state/autorSelection" field="role" default="obi:0000202">
+    <option value="obi:0000103">Investigador Principal</option>
+    <option value="obi:0000202">Co-Investigador</option>
+  </$select>
+  <$button actions=<<add-participation>>>
+    ➕ Agregar a investigación
+  </$button>
+  <$button>
+    <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=""/>
+    ✖ Cancelar
+  </$button>
+</div>
+</$reveal>
+
+!!! Crear nuevo autor
+
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="name" placeholder="Nombre completo del autor..." style="width:80%;display:block;"/>
+<$edit-text tiddler="$:/state/nuevoAutorTemp" field="orcid" placeholder="ORCID (opcional, ej: 0000-0001-2345-6789)..." style="width:80%;display:block;"/>
 <$select tiddler="$:/state/nuevoAutorTemp" field="role" default="obi:0000202">
   <option value="obi:0000103">Investigador Principal</option>
   <option value="obi:0000202">Co-Investigador</option>
 </$select>
-<$button actions=<<add-author>>>
-  ➕ Agregar Autor
+<$button actions=<<create-author>>>
+  👤 Crear Autor
+</$button>
+<$button actions=<<create-and-add-author>>>
+  👤➕ Crear y Agregar a Investigación
 </$button>
 
-!! Autores Actuales:
-<$list filter="[tag[author]field:part_of<currentTiddler>]" variable="autorTiddler">
+!! Participantes en esta investigación:
+<$list filter="[tag[participation]field:part_of<currentTiddler>]" variable="partTiddler">
   <div>
-    <$link to=<<autorTiddler>>><$view tiddler=<<autorTiddler>> field="rdfs:label"/></$link>
-    <$set name="autorRole" value={{{ [<autorTiddler>get[ro:0000087]] }}}>
-      <$list filter="[<autorRole>match[obi:0000103]]" emptyMessage="">
-        &nbsp;— Investigador Principal
-      </$list>
-      <$list filter="[<autorRole>match[obi:0000202]]" emptyMessage="">
-        &nbsp;— Co-Investigador
-      </$list>
-    </$set>
-    <$set name="autorOrcid" value={{{ [<autorTiddler>get[orcid]] }}}>
-      <$list filter="[<autorOrcid>!is[blank]]" emptyMessage="">
-        &nbsp;(ORCID: <<autorOrcid>>)
-      </$list>
+    <$set name="personTitle" value={{{ [<partTiddler>get[person]] }}}>
+      <$link to=<<personTitle>>><$view tiddler=<<personTitle>> field="rdfs:label"/></$link>
+      <$set name="partRole" value={{{ [<partTiddler>get[ro:0000087]] }}}>
+        <$list filter="[<partRole>match[obi:0000103]]" variable="ignore" emptyMessage="">
+          &nbsp;— Investigador Principal
+        </$list>
+        <$list filter="[<partRole>match[obi:0000202]]" variable="ignore" emptyMessage="">
+          &nbsp;— Co-Investigador
+        </$list>
+      </$set>
+      <$set name="personOrcid" value={{{ [<personTitle>get[orcid]] }}}>
+        <$list filter="[<personOrcid>!is[blank]]" variable="ignore" emptyMessage="">
+          &nbsp;(ORCID: <<personOrcid>>)
+        </$list>
+      </$set>
     </$set>
     <$button class="tc-btn-invisible">
-      <$action-deletetiddler $tiddler=<<autorTiddler>> />
+      <$action-deletetiddler $tiddler=<<partTiddler>>/>
       🗑️
     </$button>
   </div>
