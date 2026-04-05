@@ -19,7 +19,7 @@ title: $:/linkedhealth/research_view
   tags="participation"
   person={{$:/state/autorSelection!!selected}}
   part_of=<<currentTiddler>>
-  ro:0000087={{{ [{$:/state/autorSelection!!role}!match[]] ~[[obi:0000202]] }}}
+  ro:0000087={{$:/state/autorSelection!!role}}
 />
 <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value="" />
 \end
@@ -37,7 +37,7 @@ title: $:/linkedhealth/research_view
     tags="participation"
     person=<<authorTitle>>
     part_of=<<currentTiddler>>
-    ro:0000087={{{ [{$:/state/nuevoAutorTemp!!role}!match[]] ~[[obi:0000202]] }}}
+    ro:0000087={{$:/state/nuevoAutorTemp!!role}}
   />
 </$wikify>
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
@@ -109,7 +109,13 @@ title: $:/linkedhealth/research_view
   <option value="obi:0000103">Investigador Principal</option>
   <option value="obi:0000202">Co-Investigador</option>
 </$select>
-<$button actions=<<create-and-add-author>>>👤➕ Agregar a Investigación</$button>
+<$button>
+  <$reveal type="match" state="$:/state/nuevoAutorTemp!!role" text="">
+    <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="role" $value="obi:0000202"/>
+  </$reveal>
+  <<create-and-add-author>>
+  👤➕ Agregar a Investigación
+</$button>
 </$reveal>
 
 <$reveal type="nomatch" state="$:/state/autorSelection!!selected" text="">
@@ -117,7 +123,13 @@ title: $:/linkedhealth/research_view
   <option value="obi:0000103">Investigador Principal</option>
   <option value="obi:0000202">Co-Investigador</option>
 </$select>
-<$button actions=<<add-participation>>>➕ Agregar a investigación</$button>
+<$button>
+  <$reveal type="match" state="$:/state/autorSelection!!role" text="">
+    <$action-setfield $tiddler="$:/state/autorSelection" $field="role" $value="obi:0000202"/>
+  </$reveal>
+  <<add-participation>>
+  ➕ Agregar a investigación
+</$button>
 </$reveal>
 
 !! Participantes en esta investigación:
