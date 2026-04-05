@@ -25,21 +25,21 @@ title: $:/linkedhealth/research_view
 \end
 
 \define create-and-add-author()
-<$action-createtiddler
-  $basetitle="agent/author"
-  $createdTitle="newAuthorTitle"
-  tags="author"
-  rdfs:label={{$:/state/nuevoAutorTemp!!name}}
-  rdf:type="foaf:Person"
-  orcid={{$:/state/nuevoAutorTemp!!orcid}}
-/>
-<$action-createtiddler
-  $basetitle="participation/p"
-  tags="participation"
-  person=<<newAuthorTitle>>
-  part_of=<<currentTiddler>>
-  ro:0000087={{{ [{$:/state/nuevoAutorTemp!!role}!match[]] ~[[obi:0000202]] }}}
-/>
+<$wikify name="authorTitle" text={{{ [[$:/state/nuevoAutorTemp]get[name]addprefix[agent/]] }}}>
+  <$action-setfield $tiddler=<<authorTitle>>
+    tags="author"
+    rdfs:label={{$:/state/nuevoAutorTemp!!name}}
+    rdf:type="foaf:Person"
+    orcid={{$:/state/nuevoAutorTemp!!orcid}}
+  />
+  <$action-createtiddler
+    $basetitle="participation/p"
+    tags="participation"
+    person=<<authorTitle>>
+    part_of=<<currentTiddler>>
+    ro:0000087={{{ [{$:/state/nuevoAutorTemp!!role}!match[]] ~[[obi:0000202]] }}}
+  />
+</$wikify>
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
 \end
