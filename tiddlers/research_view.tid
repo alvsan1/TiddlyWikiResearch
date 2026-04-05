@@ -19,21 +19,9 @@ title: $:/linkedhealth/research_view
   tags="participation"
   person={{$:/state/autorSelection!!selected}}
   part_of=<<currentTiddler>>
-  ro:0000087={{$:/state/autorSelection!!role}}
+  ro:0000087={{{ [{$:/state/autorSelection!!role}!match[]] ~[[obi:0000202]] }}}
 />
 <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value="" />
-\end
-
-\define create-author()
-<$action-createtiddler
-  $basetitle="agent/author"
-  tags="author"
-  rdfs:label={{$:/state/nuevoAutorTemp!!name}}
-  rdf:type="foaf:Person"
-  orcid={{$:/state/nuevoAutorTemp!!orcid}}
-/>
-<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
-<$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
 \end
 
 \define create-and-add-author()
@@ -50,7 +38,7 @@ title: $:/linkedhealth/research_view
   tags="participation"
   person=<<newAuthorTitle>>
   part_of=<<currentTiddler>>
-  ro:0000087={{$:/state/nuevoAutorTemp!!role}}
+  ro:0000087={{{ [{$:/state/nuevoAutorTemp!!role}!match[]] ~[[obi:0000202]] }}}
 />
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value="" />
 <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="orcid" $value="" />
@@ -89,6 +77,7 @@ title: $:/linkedhealth/research_view
 <$list filter="[tag[author]search{$:/state/nuevoAutorTemp!!name}limit[8]]" variable="foundAuthor">
   <$button class="tc-btn-invisible" style="display:block;text-align:left;padding:2px 6px;">
     <$action-setfield $tiddler="$:/state/autorSelection" $field="selected" $value=<<foundAuthor>>/>
+    <$action-setfield $tiddler="$:/state/autorSelection" $field="role" $value="obi:0000202"/>
     <$action-setfield $tiddler="$:/state/nuevoAutorTemp" $field="name" $value=""/>
     🔍 <$view tiddler=<<foundAuthor>> field="rdfs:label"/>
     <$list filter="[<foundAuthor>has[orcid]]" variable="ignore" emptyMessage="">
@@ -120,8 +109,7 @@ title: $:/linkedhealth/research_view
   <option value="obi:0000103">Investigador Principal</option>
   <option value="obi:0000202">Co-Investigador</option>
 </$select>
-<$button actions=<<create-author>>>👤 Crear Autor</$button>
-<$button actions=<<create-and-add-author>>>👤➕ Crear y Agregar a Investigación</$button>
+<$button actions=<<create-and-add-author>>>👤➕ Agregar a Investigación</$button>
 </$reveal>
 
 <$reveal type="nomatch" state="$:/state/autorSelection!!selected" text="">
