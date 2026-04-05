@@ -122,21 +122,20 @@ title: $:/linkedhealth/research_view
 
 !! Participantes en esta investigación:
 <$list filter="[tag[participation]field:part_of<currentTiddler>]" variable="partTiddler">
-  <div>
+  <div style="margin:4px 0;padding:4px 0;border-bottom:1px solid #eee;">
     <$set name="personTitle" value={{{ [<partTiddler>get[person]] }}}>
-      <$link to=<<personTitle>>><$view tiddler=<<personTitle>> field="rdfs:label"/></$link>
-      <$set name="partRole" value={{{ [<partTiddler>get[ro:0000087]] }}}>
-        <$list filter="[<partRole>match[obi:0000103]]" variable="ignore" emptyMessage="">
-          &nbsp;— Investigador Principal
-        </$list>
-        <$list filter="[<partRole>match[obi:0000202]]" variable="ignore" emptyMessage="">
-          &nbsp;— Co-Investigador
-        </$list>
-      </$set>
+      <$link to=<<personTitle>>><strong><$view tiddler=<<personTitle>> field="rdfs:label"/></strong></$link>
+      &nbsp;
+      <$reveal type="match" state=<<partTiddler>> stateField="ro:0000087" text="obi:0000103">
+        <em style="color:#555;">— Investigador Principal</em>
+      </$reveal>
+      <$reveal type="match" state=<<partTiddler>> stateField="ro:0000087" text="obi:0000202">
+        <em style="color:#555;">— Co-Investigador</em>
+      </$reveal>
       <$list filter="[<personTitle>has[orcid]]" variable="ignore" emptyMessage="">
         <$set name="personOrcid" value={{{ [<personTitle>get[orcid]] }}}>
           <$list filter="[<personOrcid>!is[blank]]" variable="ignore" emptyMessage="">
-            &nbsp;(ORCID: <<personOrcid>>)
+            <small style="color:#777;">&nbsp;(ORCID: <<personOrcid>>)</small>
           </$list>
         </$set>
       </$list>

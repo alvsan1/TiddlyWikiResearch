@@ -14,15 +14,17 @@ list-before: $:/core/ui/ViewTemplate/body
 !! Participaciones en investigaciones
 
 <$list filter="[tag[participation]field:person<currentTiddler>]" variable="partTiddler">
-<div>
+<div style="margin:4px 0;padding:6px 0;border-bottom:1px solid #eee;">
   <$link to={{{ [<partTiddler>get[part_of]] }}}>
-    <$view tiddler=<<partTiddler>> field="part_of"/>
+    <strong><$view tiddler=<<partTiddler>> field="part_of"/></strong>
   </$link>
-  —
-  <$set name="partRole" value={{{ [<partTiddler>get[ro:0000087]] }}}>
-    <$list filter="[<partRole>match[obi:0000103]]" variable="ignore" emptyMessage="">Investigador Principal</$list>
-    <$list filter="[<partRole>match[obi:0000202]]" variable="ignore" emptyMessage="">Co-Investigador</$list>
-  </$set>
+  &nbsp;—&nbsp;
+  <$reveal type="match" state=<<partTiddler>> stateField="ro:0000087" text="obi:0000103">
+    <em style="color:#555;">Investigador Principal</em>
+  </$reveal>
+  <$reveal type="match" state=<<partTiddler>> stateField="ro:0000087" text="obi:0000202">
+    <em style="color:#555;">Co-Investigador</em>
+  </$reveal>
 </div>
 </$list>
 
