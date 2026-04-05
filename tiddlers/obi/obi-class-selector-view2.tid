@@ -12,7 +12,8 @@ type: text/vnd.tiddlywiki
   </$list>
 </$select>
 
-<$list filter="[{$:/temp/obi/selected-concept}!is[blank]]" variable="conceptSelect">
+<$reveal type="nomatch" state="$:/temp/obi/selected-concept" text="">
+<$set name="conceptSelect" value={{$:/temp/obi/selected-concept}}>
 <div class="tc-tiddler-preview tc-subtitle">
   <strong>Concepto:</strong> <$link to=<<conceptSelect>>><<conceptSelect>></$link><br/>
   <$select tiddler="$:/temp/obi/selection/<<conceptSelect>>" field="obi_class_selection">
@@ -23,7 +24,7 @@ type: text/vnd.tiddlywiki
   </$select><br/><br/>
   <$set name="selectedObiClass" value={{$:/temp/obi/selection/<<conceptSelect>>!!obi_class_selection}}>
     <$button>
-      <$macrocall 
+      <$macrocall
         $name="create-obi-instance"
         concept=<<conceptSelect>>
         class=<<selectedObiClass>>
@@ -33,4 +34,5 @@ type: text/vnd.tiddlywiki
     </$button>
   </$set>
 </div>
-</$list>
+</$set>
+</$reveal>

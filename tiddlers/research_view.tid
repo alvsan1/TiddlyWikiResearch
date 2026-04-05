@@ -10,11 +10,10 @@ title: $:/linkedhealth/research_view
 
 
 \define add-node-to-view-main()
-<$transclude $variable="addNodeToView"
-  nodeName={{$:/state/newNodeTemp!!node}}
-  main=true
-  nodeGraph={{$:/state/newNodeTemp!!nodegraph}}
-  view={{!!title}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="nodename"  $value={{$:/state/newNodeTemp!!node}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="nodegraph" $value={{$:/state/newNodeTemp!!nodegraph}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="view"      $value={{!!title}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="main"      $value="true"/>
 \end
 
 \define add-participation()
@@ -148,12 +147,8 @@ title: $:/linkedhealth/research_view
       <$reveal type="match" state=<<partTiddler>> stateField="ro:0000087" text="obi:0000202">
         <em style="color:#555;">— Co-Investigador</em>
       </$reveal>
-      <$list filter="[<personTitle>has[orcid]]" variable="ignore" emptyMessage="">
-        <$set name="personOrcid" value={{{ [<personTitle>get[orcid]] }}}>
-          <$list filter="[<personOrcid>!is[blank]]" variable="ignore" emptyMessage="">
-            <small style="color:#777;">&nbsp;(ORCID: <<personOrcid>>)</small>
-          </$list>
-        </$set>
+      <$list filter="[<personTitle>get[orcid]regexp[.]]" variable="personOrcid" emptyMessage="">
+        <small style="color:#777;">&nbsp;(ORCID: <<personOrcid>>)</small>
       </$list>
     </$set>
     <$button class="tc-btn-invisible">

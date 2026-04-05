@@ -3,9 +3,8 @@ type: text/vnd.tiddlywiki
 tags: $:/tags/Macro
 
 \define add-node-to-view-main()
-<$transclude $variable="addNodeToView"
-  nodeName={{$:/state/newNodeTemp!!node}}
-  main=true
-  nodeGraph={{$:/state/newNodeTemp!!nodegraph}}
-  view={{!!title}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="nodename"  $value={{$:/state/newNodeTemp!!node}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="nodegraph" $value={{$:/state/newNodeTemp!!nodegraph}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="view"      $value={{!!title}}/>
+<$action-setfield $tiddler="$:/state/addNodeTrigger" $field="main"      $value="true"/>
 \end
