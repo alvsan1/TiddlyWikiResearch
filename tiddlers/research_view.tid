@@ -10,7 +10,13 @@ title: $:/linkedhealth/research_view
 
 
 \define add-node-to-view-main()
-   <$transclude $variable="addNodeToView" nodeName={{$:/state/newNodeTemp!!node}} main=true nodeGraph={{$:/state/newNodeTemp!!nodegraph}} view={{!!titleResearch}}/>
+<$set name="viewName" filter="[all[current]get[titleresearch]!is[blank]]" emptyValue={{!!title}}>
+<$transclude $variable="addNodeToView"
+  nodeName={{$:/state/newNodeTemp!!node}}
+  main=true
+  nodeGraph={{$:/state/newNodeTemp!!nodegraph}}
+  view=<<viewName>>/>
+</$set>
 \end
 
 \define add-participation()

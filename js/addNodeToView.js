@@ -30,13 +30,27 @@ exports.params = [
 Run the macro
 */
 exports.run = function(nodeName, main, nodeGraph, view) {
-	console.log("nodeName: " + nodeName + ", main: " + main + ", nodeGraph: " + nodeGraph + ", view: " + view );
-	if (!nodeName || !view) {
-        console.log("addNodeToView: nodeName o view vacíos, abortando");
+	console.log("[addNodeToView] nodeName=" + nodeName + " nodeGraph=" + nodeGraph + " view=" + view + " $tm=" + (typeof $tm));
+	if (!nodeName) {
+        console.warn("[addNodeToView] nodeName vacío, abortando");
+        return "";
+    }
+    if (!view) {
+        console.warn("[addNodeToView] view vacío — el tiddler de investigación no tiene el campo 'titleresearch'. Agrega ese campo manualmente o usa el título del tiddler como nombre de vista en TiddlyMap.");
+        return "";
+    }
+    if (typeof $tm === "undefined") {
+        console.warn("[addNodeToView] $tm no disponible — TiddlyMap no está cargado o aún no inicializó.");
         return "";
     }
 	// Paso 1: Asegurarse de que el nodo existe
-    var nodeId = $tm.adapter.getId(nodeName);
+    var nodeId;
+    try {
+        nodeId = $tm.adapter.getId(nodeName);
+    } catch(e) {
+        console.error("[addNodeToView] Error en $tm.adapter.getId:", e);
+        return "";
+    }
     
     if (typeof nodeId === "undefined") {
         // Crear el tiddler primero
@@ -63,13 +77,14 @@ exports.run = function(nodeName, main, nodeGraph, view) {
     
     // Paso 2: Añadir a la vista
     if (nodeId) {
-        var viewObj = new $tm.ViewAbstraction(view, {isCreate: true});
-        viewObj.addNode(nodeId);
-        
-        // Usar el método específico de ViewAbstraction para posicionar el nodo
-        viewObj.saveNodePosition(nodeId, { x: 0, y: 0 });
-        
-        console.log("Nodo añadido a la vista: " + view);
+        try {
+            var viewObj = new $tm.ViewAbstraction(view, {isCreate: true});
+            viewObj.addNode(nodeId);
+            viewObj.saveNodePosition(nodeId, { x: 0, y: 0 });
+            console.log("[addNodeToView] Nodo añadido a la vista: " + view);
+        } catch(e) {
+            console.error("[addNodeToView] Error añadiendo a vista TiddlyMap:", e);
+        }
     }
 
 	/*
